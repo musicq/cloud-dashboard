@@ -1,12 +1,16 @@
 import {AttributeType, Table} from '@aws-cdk/aws-dynamodb'
 import * as cdk from '@aws-cdk/core'
+import {EnvProps} from '../types'
 
 export class Database extends cdk.Construct {
-  constructor(scope: cdk.Construct, id: string) {
+  table: Table
+
+  constructor(scope: cdk.Construct, id: string, env: EnvProps) {
     super(scope, id)
 
-    new Table(this, 'Question', {
-      partitionKey: {name: 'id', type: AttributeType.NUMBER}
+    this.table = new Table(this, env.tableName, {
+      partitionKey: {name: 'userId', type: AttributeType.STRING},
+      sortKey: {name: 'dId', type: AttributeType.STRING}
     })
   }
 }

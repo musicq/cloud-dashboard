@@ -1,20 +1,24 @@
 Resources:
-  DatabaseQuestion7AA389D3:
+  DatabasecdappsA584E599:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
-        - AttributeName: id
+        - AttributeName: userId
           KeyType: HASH
+        - AttributeName: dId
+          KeyType: RANGE
       AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: "N"
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: dId
+          AttributeType: S
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: BackendStack/Database/Question/Resource
+      aws:cdk:path: BackendStack/Database/cd-apps/Resource
   LambdaFunctionshelloFnServiceRoleEB80A9DC:
     Type: AWS::IAM::Role
     Properties:
@@ -33,12 +37,40 @@ Resources:
               - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
     Metadata:
       aws:cdk:path: BackendStack/LambdaFunctions/helloFn/ServiceRole/Resource
+  LambdaFunctionshelloFnServiceRoleDefaultPolicy3AFB5FE0:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - DatabasecdappsA584E599
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: LambdaFunctionshelloFnServiceRoleDefaultPolicy3AFB5FE0
+      Roles:
+        - Ref: LambdaFunctionshelloFnServiceRoleEB80A9DC
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/helloFn/ServiceRole/DefaultPolicy/Resource
   LambdaFunctionshelloFn78D97221:
     Type: AWS::Lambda::Function
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eS3BucketCFDE3952
+          Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3BucketF39480F5
         S3Key:
           Fn::Join:
             - ""
@@ -46,19 +78,24 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eS3VersionKeyBCDB680B
+                      - Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eS3VersionKeyBCDB680B
+                      - Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09
       Handler: hello.main
       Role:
         Fn::GetAtt:
           - LambdaFunctionshelloFnServiceRoleEB80A9DC
           - Arn
       Runtime: nodejs12.x
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: DatabasecdappsA584E599
     DependsOn:
+      - LambdaFunctionshelloFnServiceRoleDefaultPolicy3AFB5FE0
       - LambdaFunctionshelloFnServiceRoleEB80A9DC
     Metadata:
       aws:cdk:path: BackendStack/LambdaFunctions/helloFn/Resource
@@ -289,15 +326,15 @@ Resources:
       Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eS3BucketCFDE3952:
+  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3BucketF39480F5:
     Type: String
-    Description: S3 bucket for asset "6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18e"
-  AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eS3VersionKeyBCDB680B:
+    Description: S3 bucket for asset "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
+  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09:
     Type: String
-    Description: S3 key for asset version "6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18e"
-  AssetParameters6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18eArtifactHash080B82E1:
+    Description: S3 key for asset version "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
+  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dArtifactHash56E34828:
     Type: String
-    Description: Artifact hash for asset "6a7d873afb9708c54a028397815847798167997a92acf973f48ca7887265c18e"
+    Description: Artifact hash for asset "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
 Outputs:
   GatewayhelloEndpoint0AD6BE83:
     Value:

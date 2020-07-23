@@ -4,7 +4,7 @@ export const Launch = () => {
   return (
     <div className="flex justify-center items-center h-full w-full">
       <h1 className="text-6xl" style={style.rotate}>
-        🌙
+
       </h1>
 
       <style>{`

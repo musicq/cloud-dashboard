@@ -1,28 +1,31 @@
 import React from 'react'
 import {useCurrentUser} from '../../shared/useCurrentUser'
 import {CProps} from '../../types'
+import {Avatar} from '../Avatar'
 
-interface AppBarProps {
-}
+interface AppBarProps {}
 
 export const AppBar = ({children}: CProps<AppBarProps>) => {
   const {user} = useCurrentUser()
 
+  console.log(user)
+
+  const onOpenMenu = () => {
+    console.log('Open menu')
+  }
+
   return (
     <div>
-      <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center">
+      <div
+        className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center">
         <h1 className="text-3xl text-white">Cloud dashboard</h1>
 
         {user && (
-          <div>
-            {(user as any).username}
-          </div>
+          <Avatar user={user}/>
         )}
       </div>
 
-      <div className="overflow-y-auto">
-        {children}
-      </div>
+      <div className="overflow-y-auto">{children}</div>
     </div>
   )
 }

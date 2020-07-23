@@ -8,12 +8,6 @@ interface AppBarProps {}
 export const AppBar = ({children}: CProps<AppBarProps>) => {
   const {user} = useCurrentUser()
 
-  console.log(user)
-
-  const onOpenMenu = () => {
-    console.log('Open menu')
-  }
-
   return (
     <div>
       <div

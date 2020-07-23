@@ -1,12 +1,11 @@
-import {Auth} from 'aws-amplify'
 import React, {useState} from 'react'
 import {MdPerson} from 'react-icons/md'
-import {Err, go} from '../../shared/go'
+import {Auth$, UserInfo} from '../../services/auth.service'
 import {CProps} from '../../types'
 import {Button} from '../Button'
 
 interface AvatarProps {
-  user: {username: string; email: string} | null
+  user: UserInfo
 }
 
 export const Avatar = ({user}: CProps<AvatarProps>) => {
@@ -14,15 +13,7 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
 
   const onOpenMenu = () => setVisible(!visible)
 
-  const onLogout = async () => {
-    const res = await go(Auth.signOut())
-
-    if (res instanceof Err) {
-      console.error('Logout failed.', res.e)
-    }
-
-    console.log('Logout!')
-  }
+  const onLogout = async () => Auth$.signOut()
 
   if (!user) {
     return <div>Login</div>
@@ -45,7 +36,7 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
 
             <div className="ml-4">
               <h1 className="text-xl font-bold">{user.username}</h1>
-              <h2 className="text-xl">{user.email}</h2>
+              <h2 className="text-xl">{user.attributes.email}</h2>
             </div>
           </div>
 

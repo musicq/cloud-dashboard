@@ -1,21 +1,18 @@
-import {Auth} from 'aws-amplify'
 import {useEffect, useState} from 'react'
+import {Auth$, UserInfo} from '../services/auth.service'
 
 export function useCurrentUser() {
   const [loading, setLoading] = useState(false)
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<UserInfo>(null)
 
   useEffect(() => {
     setLoading(true)
-    Auth.currentUserInfo()
-      .then(user => {
-        setUser(user)
-      })
-      .catch(e => {
-        console.error('Get userinfo failed:', e)
-        setUser(null)
-      })
-      .finally(() => setLoading(false))
+    const sub = Auth$.getUserInfo().subscribe(userInfo => {
+      setUser(userInfo)
+      setLoading(false)
+    })
+
+    return () => sub.unsubscribe()
   }, [])
 
   return {loading, user}

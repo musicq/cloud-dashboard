@@ -1,0 +1,7 @@
+{
+  "name": "cloud-dashboard",
+  "author": "liang kui",
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}

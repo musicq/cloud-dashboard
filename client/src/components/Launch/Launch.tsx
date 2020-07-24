@@ -1,10 +1,11 @@
 import React from 'react'
+import {FaSpinner} from 'react-icons/fa'
 
 export const Launch = () => {
   return (
     <div className="flex justify-center items-center h-full w-full">
-      <h1 className="text-6xl" style={style.rotate}>
-
+      <h1 style={style.rotate}>
+        <FaSpinner className="text-6xl"/>
       </h1>
 
       <style>{`

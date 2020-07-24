@@ -1,4 +1,7 @@
 import React, {useState} from 'react'
+import {Button} from '../../components/Button'
+import {LoginForm} from '../../components/LoginForm'
+import {TextInput} from '../../components/TextInput'
 import {Auth$} from '../../services/auth.service'
 
 export const Login = () => {
@@ -33,19 +36,8 @@ export const Login = () => {
   // }) }, [])
 
   return (
-    <div className="App">
-      <input type="username" onChange={e => setUsername(e.target.value)}/>
-      <input type="email" onChange={e => setEmail(e.target.value)}/>
-      <input type="password" onChange={e => setPwd(e.target.value)}/>
-
-      <button onClick={onSignUp}>Sign up</button>
-
-      <hr/>
-
-      <input type="username" onChange={e => setUsername(e.target.value)}/>
-      <input type="password" onChange={e => setPwd(e.target.value)}/>
-
-      <button onClick={onSignIn}>Sign in</button>
+    <div className="lg:w-1/3 md:w-1/2 w-11/12 mt-48 mx-auto shadow">
+      <LoginForm />
     </div>
   )
 }

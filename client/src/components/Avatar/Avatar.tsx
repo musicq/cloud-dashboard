@@ -29,8 +29,8 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
       </div>
 
       {visible && (
-        <div className="absolute bg-white content-between mr-2 mt-12 p-3 right-0 shadow-md top-0 w-1/3">
-          <div className="flex">
+        <div className="absolute bg-white content-between mr-2 mt-12 right-0 shadow-md top-0 w-1/3">
+          <div className="flex p-3">
             <MdPerson className="text-3xl text-6xl text-gray-800" />
 
             <div className="ml-4">
@@ -39,7 +39,7 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
             </div>
           </div>
 
-          <div className="border-t pt-4 text-right">
+          <div className="bg-gray-200 border-t p-2 text-right">
             <Button primary onClick={onLogout}>
               Logout
             </Button>

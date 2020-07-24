@@ -12,7 +12,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = ({
-  primary,
+  primary = false,
   block = false,
   className = '',
   loading = false,

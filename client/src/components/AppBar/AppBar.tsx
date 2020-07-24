@@ -1,8 +1,8 @@
 import React from 'react'
-import {MdCloud} from 'react-icons/md'
 import {useCurrentUser} from '../../shared/useCurrentUser'
 import {CProps} from '../../types'
 import {Avatar} from '../Avatar'
+import {Logo} from '../Logo'
 
 interface AppBarProps {}
 
@@ -12,10 +12,7 @@ export const AppBar = ({children}: CProps<AppBarProps>) => {
   return (
     <div>
       <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center">
-        <h1 className="flex items-center text-3xl text-white">
-          <MdCloud className="mr-2" />
-          Cloud dashboard
-        </h1>
+        <Logo reverse />
 
         {user && <Avatar user={user} />}
       </div>

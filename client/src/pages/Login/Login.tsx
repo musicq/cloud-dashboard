@@ -1,19 +1,8 @@
-import React, {useState} from 'react'
-import {MdCloud} from 'react-icons/md'
-import {Button} from '../../components/Button'
+import React from 'react'
 import {LoginForm} from '../../components/LoginForm'
-import {TextInput} from '../../components/TextInput'
-import {Auth$} from '../../services/auth.service'
+import {Logo} from '../../components/Logo'
 
 export const Login = () => {
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [pwd, setPwd] = useState('')
-
-  const onSignUp = () => Auth$.signUp(username, pwd, email)
-
-  const onSignIn = () => Auth$.signIn(username, pwd)
-
   // useEffect(() => {
   //   Auth.currentSession().then(s => console.log(s))
   //   Auth.currentUserInfo().then(s => console.log(s))
@@ -38,10 +27,9 @@ export const Login = () => {
 
   return (
     <div>
-      <h1 className="flex items-center text-3xl px-4 py-1 text-blue-500">
-        <MdCloud className="mr-2" />
-        Cloud dashboard
-      </h1>
+      <div className="px-4 py-1">
+        <Logo />
+      </div>
 
       <div className="lg:w-1/3 md:w-1/2 w-11/12 mt-48 mx-auto shadow">
         <LoginForm />

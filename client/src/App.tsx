@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom'
 import {Guard} from './components/Guard'
 import {Launch} from './components/Launch'
 import {Dashboard} from './pages/Dashboard'
@@ -24,7 +24,10 @@ export function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Guard redirectTo="/login" guard={guard} exact path="/">
+        <Route exact path="/">
+          <Redirect to="/dashboard" />
+        </Route>
+        <Guard redirectTo="/login" guard={guard} path="/dashboard">
           <Dashboard />
         </Guard>
         <Route path="/login">

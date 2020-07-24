@@ -25,18 +25,17 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
         className="border cursor-pointer p-2 rounded-full text-white hover:bg-blue-800"
         onClick={onOpenMenu}
       >
-        <MdPerson className="text-xl"/>
+        <MdPerson className="text-xl" />
       </div>
 
       {visible && (
-        <div
-          className="absolute shadow-md bg-white border mt-12 p-3 right-0 rounded top-0 w-1/3 mr-2 content-between">
+        <div className="absolute bg-white content-between mr-2 mt-12 p-3 right-0 shadow-md top-0 w-1/3">
           <div className="flex">
-            <MdPerson className="text-3xl text-6xl text-gray-800"/>
+            <MdPerson className="text-3xl text-6xl text-gray-800" />
 
             <div className="ml-4">
-              <h1 className="text-xl font-bold">{user.username}</h1>
-              <h2 className="text-xl">{user.attributes.email}</h2>
+              <h1 className="font-bold">{user.username}</h1>
+              <h2 className="text-base">{user.attributes.email}</h2>
             </div>
           </div>
 

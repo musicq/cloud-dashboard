@@ -15,6 +15,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "rxjs": "^6.6.0",
     "tailwindcss": "^1.5.2",
@@ -44,5 +45,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://bkw6m490yh.execute-api.ap-northeast-1.amazonaws.com"
+  "proxy": "https://bkw6m490yh.execute-api.ap-northeast-1.amazonaws.com",
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.5"
+  }
 }

@@ -7,6 +7,7 @@ export function useCurrentUser() {
 
   useEffect(() => {
     setLoading(true)
+
     const sub = Auth$.getUserInfo().subscribe(userInfo => {
       setUser(userInfo)
       setLoading(false)

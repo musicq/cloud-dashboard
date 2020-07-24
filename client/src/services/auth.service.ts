@@ -1,4 +1,6 @@
 import {Auth} from 'aws-amplify'
+import {from, of} from 'rxjs'
+import {switchMap, tap} from 'rxjs/operators'
 import {Err, go} from '../shared/go'
 import {store} from '../store'
 
@@ -17,7 +19,19 @@ interface IUserInfo {
 export type UserInfo = IUserInfo | null
 
 function getUserInfo() {
-  return store.select<UserInfo>(Actions.userInfo, null)
+  return store.select<UserInfo>(Actions.userInfo, null).pipe(
+    switchMap(userInfo =>
+      userInfo === null
+        ? from(Auth.currentUserInfo()).pipe(
+            tap(data => {
+              if (data !== null) {
+                setUserInfo(data)
+              }
+            })
+          )
+        : of(userInfo)
+    )
+  )
 }
 
 function setUserInfo(userInfo: UserInfo) {

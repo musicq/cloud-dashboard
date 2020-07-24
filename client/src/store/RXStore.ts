@@ -22,6 +22,7 @@ export function createStore(initialState: State = {}) {
     predict: string | MapFn,
     defaultValue?: S
   ): Observable<S> => {
+    // eslint-disable-next-line
     if (predict == undefined) {
       throw new Error('missing \'predict\' parameter in select\' method!')
     }

@@ -4,12 +4,12 @@ import {Observable, Subscription} from 'rxjs'
 import {CProps} from '../../types'
 
 interface GuardProps extends RouteProps {
-  redirectTo: string
+  redirectTo?: string
   guard: () => boolean | Observable<boolean> | Promise<boolean>
 }
 
 export const Guard = ({
-  redirectTo = '/',
+  redirectTo = '/login',
   guard,
   children,
   ...rest

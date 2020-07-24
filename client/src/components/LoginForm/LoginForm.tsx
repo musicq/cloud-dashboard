@@ -133,7 +133,7 @@ export const LoginForm = () => {
 
         <Button
           type="submit"
-          className="block w-full mt-10"
+          className="mt-10"
           primary
           block
           loading={isSubmitting}

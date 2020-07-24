@@ -1,4 +1,5 @@
 import React from 'react'
+import {useHistory, useRouteMatch} from 'react-router-dom'
 import {useCurrentUser} from '../../shared/useCurrentUser'
 import {MdAddCircle} from 'react-icons/md'
 import {CProps} from '../../types'
@@ -10,8 +11,12 @@ interface AppBarProps {}
 
 export const AppBar = ({children}: CProps<AppBarProps>) => {
   const {user} = useCurrentUser()
+  const history = useHistory()
+  const match = useRouteMatch()
 
-  const onCreateProject = () => console.log('create project')
+  const isNewProjectPath = match.path === '/new-project'
+
+  const onCreateProject = () => history.push('/new-project')
 
   const isLoggedIn = user !== null
 
@@ -22,16 +27,18 @@ export const AppBar = ({children}: CProps<AppBarProps>) => {
 
         {isLoggedIn && (
           <div className="flex items-center">
-            <Button
-              primary
-              className="mr-8 text-white"
-              onClick={onCreateProject}
-            >
-              <div className="flex items-center">
-                <MdAddCircle className="mr-1" />
-                New project
-              </div>
-            </Button>
+            {!isNewProjectPath && (
+              <Button
+                primary
+                className="mr-8 text-white"
+                onClick={onCreateProject}
+              >
+                <div className="flex items-center">
+                  <MdAddCircle className="mr-1" />
+                  New project
+                </div>
+              </Button>
+            )}
 
             {user && <Avatar user={user} />}
           </div>

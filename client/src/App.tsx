@@ -4,6 +4,7 @@ import {Guard} from './components/Guard'
 import {Launch} from './components/Launch'
 import {Dashboard} from './pages/Dashboard'
 import {Login} from './pages/Login'
+import {NewProject} from './pages/NewProject'
 import {useAuthConfig} from './shared/useAuthConfig'
 import {useCurrentUser} from './shared/useCurrentUser'
 
@@ -27,8 +28,11 @@ export function App() {
         <Route exact path="/">
           <Redirect to="/dashboard" />
         </Route>
-        <Guard redirectTo="/login" guard={guard} path="/dashboard">
+        <Guard guard={guard} path="/dashboard">
           <Dashboard />
+        </Guard>
+        <Guard guard={guard} path="/new-project">
+          <NewProject />
         </Guard>
         <Route path="/login">
           <Login />

@@ -23,12 +23,12 @@ function getUserInfo() {
     switchMap(userInfo =>
       userInfo === null
         ? from(Auth.currentUserInfo()).pipe(
-            tap(data => {
-              if (data !== null) {
-                setUserInfo(data)
-              }
-            })
-          )
+        tap(data => {
+          if (data !== null) {
+            setUserInfo(data)
+          }
+        })
+        )
         : of(userInfo)
     )
   )
@@ -41,7 +41,7 @@ function setUserInfo(userInfo: UserInfo) {
   }))
 }
 
-async function signIn(username: string, password: string) {
+async function signIn(username: string, password: string): Promise<UserInfo> {
   const res = await go(
     Auth.signIn({
       username,
@@ -52,22 +52,30 @@ async function signIn(username: string, password: string) {
   if (res instanceof Err) {
     console.error('Login failed.\n', res.e)
 
-    return setUserInfo(null)
+    setUserInfo(null)
+
+    return null
   }
 
   const userInfo = await go(Auth.currentUserInfo())
 
   setUserInfo(userInfo)
+
+  return userInfo
 }
 
-async function signOut() {
+async function signOut(): Promise<boolean> {
   const res = await go(Auth.signOut())
 
   if (res instanceof Err) {
-    return console.error('Logout failed.\n', res.e)
+    console.error('Logout failed.\n', res.e)
+
+    return false
   }
 
   setUserInfo(null)
+
+  return true
 }
 
 function signUp(username: string, password: string, email: string) {

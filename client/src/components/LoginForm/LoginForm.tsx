@@ -1,4 +1,5 @@
 import React, {SyntheticEvent, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import {Auth$} from '../../services/auth.service'
 import {Button} from '../Button'
 import {TextInput} from '../TextInput'
@@ -14,23 +15,28 @@ export const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false)
+  const history = useHistory()
 
   const onSwitchType = () =>
     setType(type === Type.Register ? Type.Login : Type.Register)
 
   const onSignIn = async () => {
     if (!username || !password) {
-      return alert("You haven't finished all the fields.")
+      return alert('You haven\'t finished all the fields.')
     }
 
     setSubmitting(true)
-    await Auth$.signIn(username, password)
+    const userInfo = await Auth$.signIn(username, password)
     setSubmitting(false)
+
+    if (userInfo) {
+      history.push('/')
+    }
   }
 
   const onSignUp = () => {
     if (!username || !password || !email) {
-      return alert("You haven't finished all the fields.")
+      return alert('You haven\'t finished all the fields.')
     }
 
     setSubmitting(true)

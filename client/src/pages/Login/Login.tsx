@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {MdCloud} from 'react-icons/md'
 import {Button} from '../../components/Button'
 import {LoginForm} from '../../components/LoginForm'
 import {TextInput} from '../../components/TextInput'
@@ -36,8 +37,15 @@ export const Login = () => {
   // }) }, [])
 
   return (
-    <div className="lg:w-1/3 md:w-1/2 w-11/12 mt-48 mx-auto shadow">
-      <LoginForm />
+    <div>
+      <h1 className="flex items-center text-3xl px-4 py-1 text-blue-500">
+        <MdCloud className="mr-2" />
+        Cloud dashboard
+      </h1>
+
+      <div className="lg:w-1/3 md:w-1/2 w-11/12 mt-48 mx-auto shadow">
+        <LoginForm />
+      </div>
     </div>
   )
 }

@@ -4,10 +4,12 @@ import {CProps} from '../../types'
 
 interface SpinnerProps {}
 
-export const Spinner = ({}: CProps<SpinnerProps>) => {
+export const Spinner = ({className = ''}: CProps<SpinnerProps>) => {
+  const cls = ['inline-flex', className].join(' ')
+
   return (
     <>
-      <span className="inline-flex" style={style.rotate}>
+      <span className={cls} style={style.rotate}>
         <FaSpinner className="w-full h-full" />
       </span>
 

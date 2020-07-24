@@ -4,9 +4,7 @@ import {Spinner} from '../Spinner'
 export const Launch = () => {
   return (
     <div className="flex justify-center items-center h-full w-full">
-      <div className="h-64 w-64">
-        <Spinner />
-      </div>
+      <Spinner className="w-20 h-20" />
     </div>
   )
 }

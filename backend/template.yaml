@@ -1,5 +1,86 @@
 Resources:
-  DatabasecdappsA584E599:
+  UserPoolsmsRole5DA814EE:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:ExternalId: BackendStackUserPool37778F6D
+            Effect: Allow
+            Principal:
+              Service: cognito-idp.amazonaws.com
+        Version: "2012-10-17"
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action: sns:Publish
+                Effect: Allow
+                Resource: "*"
+            Version: "2012-10-17"
+          PolicyName: sns-publish
+    Metadata:
+      aws:cdk:path: BackendStack/UserPool/UserPool/smsRole/Resource
+  UserPool6D0DFADB:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_phone_number
+            Priority: 1
+          - Name: verified_email
+            Priority: 2
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AliasAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationMessage: The verification code to your new account is {####}
+      EmailVerificationSubject: Verify your new account
+      Schema:
+        - Mutable: true
+          Name: email
+          Required: true
+      SmsConfiguration:
+        ExternalId: BackendStackUserPool37778F6D
+        SnsCallerArn:
+          Fn::GetAtt:
+            - UserPoolsmsRole5DA814EE
+            - Arn
+      SmsVerificationMessage: The verification code to your new account is {####}
+      UserPoolName: cd-user-pool
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailMessage: The verification code to your new account is {####}
+        EmailSubject: Verify your new account
+        SmsMessage: The verification code to your new account is {####}
+    Metadata:
+      aws:cdk:path: BackendStack/UserPool/UserPool/Resource
+  UserPoolclient6752BE02:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId:
+        Ref: UserPool6D0DFADB
+      AllowedOAuthFlows:
+        - implicit
+        - code
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - profile
+        - phone
+        - email
+        - openid
+        - aws.cognito.signin.user.admin
+      CallbackURLs:
+        - https://example.com
+      ClientName: cloud-client
+      SupportedIdentityProviders:
+        - COGNITO
+    Metadata:
+      aws:cdk:path: BackendStack/UserPool/UserPool/client/Resource
+  DatabaseE85E1D09:
     Type: AWS::DynamoDB::Table
     Properties:
       KeySchema:
@@ -18,7 +99,7 @@ Resources:
     UpdateReplacePolicy: Retain
     DeletionPolicy: Retain
     Metadata:
-      aws:cdk:path: BackendStack/Database/cd-apps/Resource
+      aws:cdk:path: BackendStack/Database/Database/Resource
   LambdaFunctionshelloFnServiceRoleEB80A9DC:
     Type: AWS::IAM::Role
     Properties:
@@ -56,7 +137,7 @@ Resources:
             Effect: Allow
             Resource:
               - Fn::GetAtt:
-                  - DatabasecdappsA584E599
+                  - DatabaseE85E1D09
                   - Arn
               - Ref: AWS::NoValue
         Version: "2012-10-17"
@@ -70,7 +151,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3BucketF39480F5
+          Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3Bucket2CF3461A
         S3Key:
           Fn::Join:
             - ""
@@ -78,12 +159,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09
+                      - Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3VersionKey3CC927C4
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09
+                      - Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3VersionKey3CC927C4
       Handler: hello.main
       Role:
         Fn::GetAtt:
@@ -93,12 +174,94 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME:
-            Ref: DatabasecdappsA584E599
+            Ref: DatabaseE85E1D09
     DependsOn:
       - LambdaFunctionshelloFnServiceRoleDefaultPolicy3AFB5FE0
       - LambdaFunctionshelloFnServiceRoleEB80A9DC
     Metadata:
       aws:cdk:path: BackendStack/LambdaFunctions/helloFn/Resource
+      aws:asset:path: /Users/musicqpee/github/cloud-dashboard/backend/lambda
+      aws:asset:property: Code
+  LambdaFunctionsprojectFnServiceRoleBD723781:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/projectFn/ServiceRole/Resource
+  LambdaFunctionsprojectFnServiceRoleDefaultPolicyC097A51D:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+              - dynamodb:BatchWriteItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - DatabaseE85E1D09
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: LambdaFunctionsprojectFnServiceRoleDefaultPolicyC097A51D
+      Roles:
+        - Ref: LambdaFunctionsprojectFnServiceRoleBD723781
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/projectFn/ServiceRole/DefaultPolicy/Resource
+  LambdaFunctionsprojectFn2F7CB4A2:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3Bucket2CF3461A
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3VersionKey3CC927C4
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3VersionKey3CC927C4
+      Handler: project.main
+      Role:
+        Fn::GetAtt:
+          - LambdaFunctionsprojectFnServiceRoleBD723781
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: DatabaseE85E1D09
+    DependsOn:
+      - LambdaFunctionsprojectFnServiceRoleDefaultPolicyC097A51D
+      - LambdaFunctionsprojectFnServiceRoleBD723781
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/projectFn/Resource
       aws:asset:path: /Users/musicqpee/github/cloud-dashboard/backend/lambda
       aws:asset:property: Code
   Gatewayhello270BBC94:
@@ -320,21 +483,240 @@ Resources:
               - /invocations
     Metadata:
       aws:cdk:path: BackendStack/Gateway/hello/Default/ANY/Resource
+  GatewayprojectAEA5B4C8:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: project
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Resource
+  GatewayprojectCloudWatchRole86C6969D:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/CloudWatchRole/Resource
+  GatewayprojectAccount662D3C39:
+    Type: AWS::ApiGateway::Account
+    Properties:
+      CloudWatchRoleArn:
+        Fn::GetAtt:
+          - GatewayprojectCloudWatchRole86C6969D
+          - Arn
+    DependsOn:
+      - GatewayprojectAEA5B4C8
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Account
+  GatewayprojectDeployment5F5930B8f40dd45252f5c6bc8fa785d8ff674cb1:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: GatewayprojectAEA5B4C8
+      Description: Automatically created by the RestApi construct
+    DependsOn:
+      - GatewayprojectproxyANYE1E0D1C4
+      - Gatewayprojectproxy1545A7A8
+      - GatewayprojectANY99B503E0
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Deployment/Resource
+  GatewayprojectDeploymentStageprodF6E03E40:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: GatewayprojectAEA5B4C8
+      DeploymentId:
+        Ref: GatewayprojectDeployment5F5930B8f40dd45252f5c6bc8fa785d8ff674cb1
+      StageName: prod
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/DeploymentStage.prod/Resource
+  Gatewayprojectproxy1545A7A8:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - GatewayprojectAEA5B4C8
+          - RootResourceId
+      PathPart: "{proxy+}"
+      RestApiId:
+        Ref: GatewayprojectAEA5B4C8
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/{proxy+}/Resource
+  GatewayprojectproxyANYApiPermissionBackendStackGatewayprojectB0C6B52AANYproxyF6319F46:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsprojectFn2F7CB4A2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: GatewayprojectAEA5B4C8
+            - /
+            - Ref: GatewayprojectDeploymentStageprodF6E03E40
+            - /*/*
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/{proxy+}/ANY/ApiPermission.BackendStackGatewayprojectB0C6B52A.ANY..{proxy+}
+  GatewayprojectproxyANYApiPermissionTestBackendStackGatewayprojectB0C6B52AANYproxy8E722625:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsprojectFn2F7CB4A2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: GatewayprojectAEA5B4C8
+            - /test-invoke-stage/*/*
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/{proxy+}/ANY/ApiPermission.Test.BackendStackGatewayprojectB0C6B52A.ANY..{proxy+}
+  GatewayprojectproxyANYE1E0D1C4:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Ref: Gatewayprojectproxy1545A7A8
+      RestApiId:
+        Ref: GatewayprojectAEA5B4C8
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - LambdaFunctionsprojectFn2F7CB4A2
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/{proxy+}/ANY/Resource
+  GatewayprojectANYApiPermissionBackendStackGatewayprojectB0C6B52AANY0DFAD6AF:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsprojectFn2F7CB4A2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: GatewayprojectAEA5B4C8
+            - /
+            - Ref: GatewayprojectDeploymentStageprodF6E03E40
+            - /*/
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/ANY/ApiPermission.BackendStackGatewayprojectB0C6B52A.ANY..
+  GatewayprojectANYApiPermissionTestBackendStackGatewayprojectB0C6B52AANYF5FA8131:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsprojectFn2F7CB4A2
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: GatewayprojectAEA5B4C8
+            - /test-invoke-stage/*/
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/ANY/ApiPermission.Test.BackendStackGatewayprojectB0C6B52A.ANY..
+  GatewayprojectANY99B503E0:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: ANY
+      ResourceId:
+        Fn::GetAtt:
+          - GatewayprojectAEA5B4C8
+          - RootResourceId
+      RestApiId:
+        Ref: GatewayprojectAEA5B4C8
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - LambdaFunctionsprojectFn2F7CB4A2
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/project/Default/ANY/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
+      Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-cognito=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3BucketF39480F5:
+  AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3Bucket2CF3461A:
     Type: String
-    Description: S3 bucket for asset "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
-  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dS3VersionKeyE41B1C09:
+    Description: S3 bucket for asset "f2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7"
+  AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7S3VersionKey3CC927C4:
     Type: String
-    Description: S3 key for asset version "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
-  AssetParametersa6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998dArtifactHash56E34828:
+    Description: S3 key for asset version "f2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7"
+  AssetParametersf2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7ArtifactHash55733574:
     Type: String
-    Description: Artifact hash for asset "a6da7795599cc810f9357346b96eaffacc55631c1f5b2df45b67865e0f59998d"
+    Description: Artifact hash for asset "f2b0698621b731c0cca81171eb9431ee7524e6812fa29a60d3f26de2b4429ad7"
 Outputs:
   GatewayhelloEndpoint0AD6BE83:
     Value:
@@ -348,6 +730,19 @@ Outputs:
           - Ref: AWS::URLSuffix
           - /
           - Ref: GatewayhelloDeploymentStageprod042FD68F
+          - /
+  GatewayprojectEndpoint2A252D79:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: GatewayprojectAEA5B4C8
+          - .execute-api.
+          - Ref: AWS::Region
+          - "."
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: GatewayprojectDeploymentStageprodF6E03E40
           - /
 Conditions:
   CDKMetadataAvailable:

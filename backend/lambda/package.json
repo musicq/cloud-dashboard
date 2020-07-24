@@ -1,0 +1,9 @@
+{
+  "name": "lambda",
+  "dependencies": {
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.0.0"
+  }
+}

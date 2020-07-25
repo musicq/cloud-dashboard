@@ -11,6 +11,8 @@ interface createProjectModel {
 }
 
 export const create = async (event: AWSLambda.APIGatewayEvent) => {
+  console.log(event)
+
   if (!event.body) {
     return createResponse('Body is empty.', 400)
   }

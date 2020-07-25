@@ -18,7 +18,8 @@ export class Gateway extends cdk.Construct {
       handler: functions.helloFn
     })
 
-    this.projectsResource = this.api.root.addResource('project')
+    // /projects
+    this.projectsResource = this.api.root.addResource('projects')
     this.projectsResource.addMethod(
       'GET',
       new gateway.LambdaIntegration(functions.getProjectsFn)
@@ -28,6 +29,7 @@ export class Gateway extends cdk.Construct {
       new gateway.LambdaIntegration(functions.createProjectFn)
     )
 
+    // projects/:projectId
     this.projectResource = this.projectsResource.addResource('{projectId}')
     this.projectResource.addMethod('GET')
     this.projectResource.addMethod('PUT')

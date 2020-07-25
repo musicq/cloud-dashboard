@@ -151,7 +151,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3Bucket9A5926F0
+          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
         S3Key:
           Fn::Join:
             - ""
@@ -159,12 +159,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
       Handler: functions/hello.main
       Role:
         Fn::GetAtt:
@@ -233,7 +233,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3Bucket9A5926F0
+          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
         S3Key:
           Fn::Join:
             - ""
@@ -241,12 +241,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
       Handler: functions/project.create
       Role:
         Fn::GetAtt:
@@ -311,7 +311,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3Bucket9A5926F0
+          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
         S3Key:
           Fn::Join:
             - ""
@@ -319,12 +319,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9
+                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
       Handler: functions/project.get
       Role:
         Fn::GetAtt:
@@ -377,7 +377,7 @@ Resources:
       - Gatewayclouddashboardapi28E919CB
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Account
-  GatewayclouddashboardapiDeployment9DF53C84203b17462a56231afb1c8cec759cba1a:
+  GatewayclouddashboardapiDeployment9DF53C84ccbb5576509e9c6bdba560d5aa46ceb3:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId:
@@ -385,13 +385,13 @@ Resources:
       Description: Automatically created by the RestApi construct
     DependsOn:
       - GatewayclouddashboardapiANY124F647F
-      - GatewayclouddashboardapiprojectprojectIdDELETE137515FB
-      - GatewayclouddashboardapiprojectprojectIdGET28AEFE81
-      - GatewayclouddashboardapiprojectprojectIdPUT69136C21
-      - GatewayclouddashboardapiprojectprojectId044CFAE1
-      - GatewayclouddashboardapiprojectGET92FFA014
-      - GatewayclouddashboardapiprojectPOST14FA4B73
-      - Gatewayclouddashboardapiproject5C75E778
+      - GatewayclouddashboardapiprojectsprojectIdDELETEA33BF838
+      - GatewayclouddashboardapiprojectsprojectIdGET8CC3C45F
+      - GatewayclouddashboardapiprojectsprojectIdPUTEF250BA5
+      - GatewayclouddashboardapiprojectsprojectId13F84DA1
+      - GatewayclouddashboardapiprojectsGETC8E5FD04
+      - GatewayclouddashboardapiprojectsPOST3451A7F0
+      - GatewayclouddashboardapiprojectsB814A665
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Deployment/Resource
   GatewayclouddashboardapiDeploymentStageprod9A3F2E8E:
@@ -400,7 +400,7 @@ Resources:
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       DeploymentId:
-        Ref: GatewayclouddashboardapiDeployment9DF53C84203b17462a56231afb1c8cec759cba1a
+        Ref: GatewayclouddashboardapiDeployment9DF53C84ccbb5576509e9c6bdba560d5aa46ceb3
       StageName: prod
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/DeploymentStage.prod/Resource
@@ -419,19 +419,19 @@ Resources:
         Type: MOCK
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/ANY/Resource
-  Gatewayclouddashboardapiproject5C75E778:
+  GatewayclouddashboardapiprojectsB814A665:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
         Fn::GetAtt:
           - Gatewayclouddashboardapi28E919CB
           - RootResourceId
-      PathPart: project
+      PathPart: projects
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/Resource
-  GatewayclouddashboardapiprojectGETApiPermissionBackendStackGatewayclouddashboardapi53A67D4EGETproject9423814B:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/Resource
+  GatewayclouddashboardapiprojectsGETApiPermissionBackendStackGatewayclouddashboardapi53A67D4EGETprojects678DB002:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -453,10 +453,10 @@ Resources:
             - Ref: Gatewayclouddashboardapi28E919CB
             - /
             - Ref: GatewayclouddashboardapiDeploymentStageprod9A3F2E8E
-            - /GET/project
+            - /GET/projects
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/GET/ApiPermission.BackendStackGatewayclouddashboardapi53A67D4E.GET..project
-  GatewayclouddashboardapiprojectGETApiPermissionTestBackendStackGatewayclouddashboardapi53A67D4EGETproject6FB76A22:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/GET/ApiPermission.BackendStackGatewayclouddashboardapi53A67D4E.GET..projects
+  GatewayclouddashboardapiprojectsGETApiPermissionTestBackendStackGatewayclouddashboardapi53A67D4EGETprojectsA98B2DF9:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -476,15 +476,15 @@ Resources:
             - Ref: AWS::AccountId
             - ":"
             - Ref: Gatewayclouddashboardapi28E919CB
-            - /test-invoke-stage/GET/project
+            - /test-invoke-stage/GET/projects
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/GET/ApiPermission.Test.BackendStackGatewayclouddashboardapi53A67D4E.GET..project
-  GatewayclouddashboardapiprojectGET92FFA014:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/GET/ApiPermission.Test.BackendStackGatewayclouddashboardapi53A67D4E.GET..projects
+  GatewayclouddashboardapiprojectsGETC8E5FD04:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
       ResourceId:
-        Ref: Gatewayclouddashboardapiproject5C75E778
+        Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       AuthorizationType: NONE
@@ -504,8 +504,8 @@ Resources:
                   - Arn
               - /invocations
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/GET/Resource
-  GatewayclouddashboardapiprojectPOSTApiPermissionBackendStackGatewayclouddashboardapi53A67D4EPOSTproject65B11B2D:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/GET/Resource
+  GatewayclouddashboardapiprojectsPOSTApiPermissionBackendStackGatewayclouddashboardapi53A67D4EPOSTprojectsE5E604D9:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -527,10 +527,10 @@ Resources:
             - Ref: Gatewayclouddashboardapi28E919CB
             - /
             - Ref: GatewayclouddashboardapiDeploymentStageprod9A3F2E8E
-            - /POST/project
+            - /POST/projects
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/POST/ApiPermission.BackendStackGatewayclouddashboardapi53A67D4E.POST..project
-  GatewayclouddashboardapiprojectPOSTApiPermissionTestBackendStackGatewayclouddashboardapi53A67D4EPOSTproject3ACFFD60:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/POST/ApiPermission.BackendStackGatewayclouddashboardapi53A67D4E.POST..projects
+  GatewayclouddashboardapiprojectsPOSTApiPermissionTestBackendStackGatewayclouddashboardapi53A67D4EPOSTprojectsD6AE7DA1:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
@@ -550,15 +550,15 @@ Resources:
             - Ref: AWS::AccountId
             - ":"
             - Ref: Gatewayclouddashboardapi28E919CB
-            - /test-invoke-stage/POST/project
+            - /test-invoke-stage/POST/projects
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/POST/ApiPermission.Test.BackendStackGatewayclouddashboardapi53A67D4E.POST..project
-  GatewayclouddashboardapiprojectPOST14FA4B73:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/POST/ApiPermission.Test.BackendStackGatewayclouddashboardapi53A67D4E.POST..projects
+  GatewayclouddashboardapiprojectsPOST3451A7F0:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: POST
       ResourceId:
-        Ref: Gatewayclouddashboardapiproject5C75E778
+        Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       AuthorizationType: NONE
@@ -578,56 +578,56 @@ Resources:
                   - Arn
               - /invocations
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/POST/Resource
-  GatewayclouddashboardapiprojectprojectId044CFAE1:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/POST/Resource
+  GatewayclouddashboardapiprojectsprojectId13F84DA1:
     Type: AWS::ApiGateway::Resource
     Properties:
       ParentId:
-        Ref: Gatewayclouddashboardapiproject5C75E778
+        Ref: GatewayclouddashboardapiprojectsB814A665
       PathPart: "{projectId}"
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/{projectId}/Resource
-  GatewayclouddashboardapiprojectprojectIdGET28AEFE81:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/Resource
+  GatewayclouddashboardapiprojectsprojectIdGET8CC3C45F:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: GET
       ResourceId:
-        Ref: GatewayclouddashboardapiprojectprojectId044CFAE1
+        Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       AuthorizationType: NONE
       Integration:
         Type: MOCK
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/{projectId}/GET/Resource
-  GatewayclouddashboardapiprojectprojectIdPUT69136C21:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/GET/Resource
+  GatewayclouddashboardapiprojectsprojectIdPUTEF250BA5:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: PUT
       ResourceId:
-        Ref: GatewayclouddashboardapiprojectprojectId044CFAE1
+        Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       AuthorizationType: NONE
       Integration:
         Type: MOCK
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/{projectId}/PUT/Resource
-  GatewayclouddashboardapiprojectprojectIdDELETE137515FB:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/PUT/Resource
+  GatewayclouddashboardapiprojectsprojectIdDELETEA33BF838:
     Type: AWS::ApiGateway::Method
     Properties:
       HttpMethod: DELETE
       ResourceId:
-        Ref: GatewayclouddashboardapiprojectprojectId044CFAE1
+        Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       AuthorizationType: NONE
       Integration:
         Type: MOCK
     Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/project/{projectId}/DELETE/Resource
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/DELETE/Resource
   Gatewayhello270BBC94:
     Type: AWS::ApiGateway::RestApi
     Properties:
@@ -853,15 +853,15 @@ Resources:
       Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-cognito=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3Bucket9A5926F0:
+  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86:
     Type: String
-    Description: S3 bucket for asset "596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59"
-  AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59S3VersionKey83974FF9:
+    Description: S3 bucket for asset "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
+  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35:
     Type: String
-    Description: S3 key for asset version "596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59"
-  AssetParameters596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59ArtifactHash8587D089:
+    Description: S3 key for asset version "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
+  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163ArtifactHash9A258B08:
     Type: String
-    Description: Artifact hash for asset "596b70bf8a122f13d0fd18d9cc59cea740f2ac5126f2654ae021f6686f49ca59"
+    Description: Artifact hash for asset "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
 Outputs:
   GatewayclouddashboardapiEndpoint257740C9:
     Value:

@@ -44,7 +44,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://bkw6m490yh.execute-api.ap-northeast-1.amazonaws.com",
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5"
   }

@@ -1,15 +1,32 @@
 import React, {SyntheticEvent, useState} from 'react'
 import {useHistory} from 'react-router-dom'
+import {Alert} from '../../components/Alert'
 import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {TextInput} from '../../components/TextInput'
+import {createProject} from '../../services/projects.service'
+import {Err} from '../../shared/go'
 
 export const NewProject = () => {
+  const [projectName, setProjectName] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
   const history = useHistory()
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
+
+    setLoading(true)
+    createProject(projectName).subscribe((res: any) => {
+      setLoading(false)
+
+      if (res instanceof Err) {
+        return setError(true)
+      }
+
+      setError(false)
+      history.push(`/dashboard?projectId=${res.id}`)
+    })
   }
 
   return (
@@ -18,9 +35,16 @@ export const NewProject = () => {
         <h1 className="text-2xl border-b p-4">New project</h1>
 
         <div className="p-4">
+          {error && <Alert className="mb-4">Create project failed!</Alert>}
+
           <form onSubmit={onSubmit}>
             <div className="w-1/3">
-              <TextInput label="Project name" placeholder="Project name" />
+              <TextInput
+                label="Project name"
+                placeholder="Project name"
+                value={projectName}
+                onChange={e => setProjectName(e.target.value)}
+              />
             </div>
 
             <div className="flex items-center mt-8">

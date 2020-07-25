@@ -4,23 +4,33 @@ import {Database} from './Database'
 
 export class Functions extends cdk.Construct {
   helloFn: lambda.Function
-  projectFn: lambda.Function
+  createProjectFn: lambda.Function
+  getProjectsFn: lambda.Function
 
   constructor(scope: cdk.Construct, id: string, db: Database) {
     super(scope, id)
 
-    this.helloFn = new lambda.Function(this, 'helloFn', {
+    this.helloFn = new lambda.Function(this, 'Hello', {
       code: lambda.Code.fromAsset('./lambda'),
-      handler: 'hello.main',
+      handler: 'functions/hello.main',
       runtime: lambda.Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: db.table.tableName
       }
     })
 
-    this.projectFn = new lambda.Function(this, 'projectFn', {
+    this.createProjectFn = new lambda.Function(this, 'CreateProject', {
       code: lambda.Code.fromAsset('./lambda'),
-      handler: 'project.main',
+      handler: 'functions/project.create',
+      runtime: lambda.Runtime.NODEJS_12_X,
+      environment: {
+        TABLE_NAME: db.table.tableName
+      }
+    })
+
+    this.getProjectsFn = new lambda.Function(this, 'GetProjects', {
+      code: lambda.Code.fromAsset('./lambda'),
+      handler: 'functions/project.get',
       runtime: lambda.Runtime.NODEJS_12_X,
       environment: {
         TABLE_NAME: db.table.tableName
@@ -28,6 +38,7 @@ export class Functions extends cdk.Construct {
     })
 
     db.table.grantReadWriteData(this.helloFn)
-    db.table.grantReadWriteData(this.projectFn)
+    db.table.grantReadWriteData(this.createProjectFn)
+    db.table.grantReadData(this.getProjectsFn)
   }
 }

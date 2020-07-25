@@ -7,9 +7,9 @@ export class Database extends cdk.Construct {
   constructor(scope: cdk.Construct, id: string) {
     super(scope, id)
 
-    this.table = new Table(this, id, {
-      partitionKey: {name: 'userId', type: AttributeType.STRING},
-      sortKey: {name: 'dId', type: AttributeType.STRING}
+    this.table = new Table(this, 'cloud-dashboard-apps', {
+      partitionKey: {name: 'username', type: AttributeType.STRING},
+      sortKey: {name: 'id', type: AttributeType.STRING}
     })
   }
 }

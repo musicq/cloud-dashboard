@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk'
 import {DocumentClient} from 'aws-sdk/lib/dynamodb/document_client'
-import {Err, go} from './shared/go'
+import {Err, go} from '../shared/go'
 
 const dynamo = new AWS.DynamoDB.DocumentClient()
 

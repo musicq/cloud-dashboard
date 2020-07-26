@@ -19,5 +19,7 @@ export function createProject(projectName: string) {
 }
 
 export function getProjectById(id: string) {
-  return request(`projects`).pipe(catchError(errorHandlerWithDefaultValue({})))
+  return request(`projects/${id}`).pipe(
+    catchError(errorHandlerWithDefaultValue({}))
+  )
 }

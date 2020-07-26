@@ -1,6 +1,13 @@
 import * as gateway from '@aws-cdk/aws-apigateway'
-import {AuthorizationType} from '@aws-cdk/aws-apigateway'
+import {
+  AuthorizationType,
+  CfnAuthorizer,
+  CfnMethod
+} from '@aws-cdk/aws-apigateway'
+import {CorsOptions} from '@aws-cdk/aws-apigateway/lib/cors'
+import * as lambda from '@aws-cdk/aws-lambda'
 import * as cdk from '@aws-cdk/core'
+import {Cognito} from './Cognito'
 import {Functions} from './Functions'
 
 export class Gateway extends cdk.Construct {
@@ -8,54 +15,81 @@ export class Gateway extends cdk.Construct {
   projectsResource: gateway.Resource
   projectResource: gateway.Resource
 
-  constructor(scope: cdk.Construct, id: string, functions: Functions) {
+  private authorizer: CfnAuthorizer
+
+  private static get defaultCorsPreflightOptions(): CorsOptions {
+    return {
+      allowOrigins: gateway.Cors.ALL_ORIGINS,
+      allowMethods: gateway.Cors.ALL_METHODS,
+      allowHeaders: ['*']
+    }
+  }
+
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    private functions: Functions,
+    private cognito: Cognito
+  ) {
     super(scope, id)
 
     this.api = new gateway.RestApi(this, 'cloud-dashboard-api', {
-      defaultCorsPreflightOptions: {
-        allowOrigins: gateway.Cors.ALL_ORIGINS,
-        allowMethods: gateway.Cors.ALL_METHODS,
-        allowHeaders: ['*']
-      }
+      defaultCorsPreflightOptions: Gateway.defaultCorsPreflightOptions
     })
 
-    this.api.root.addMethod('ANY')
+    this.authorizer = new CfnAuthorizer(this, 'cloud-dashboard-authorizer', {
+      name: 'cloud-dashboard-authorizer',
+      restApiId: this.api.restApiId,
+      type: 'COGNITO_USER_POOLS',
+      identitySource: 'method.request.header.Authorization',
+      providerArns: [this.cognito.userPool.userPoolArn]
+    })
 
     new gateway.LambdaRestApi(this, 'hello', {
       handler: functions.helloFn
     })
 
-    // /projects
-    this.projectsResource = this.api.root.addResource('projects', {
-      defaultCorsPreflightOptions: {
-        allowOrigins: gateway.Cors.ALL_ORIGINS,
-        allowMethods: gateway.Cors.ALL_METHODS,
-        allowHeaders: ['*']
-      }
+    this.buildProjectsAPI()
+  }
+
+  private wrapAuthorizer(
+    res: gateway.Resource,
+    method: string,
+    fn: lambda.Function
+  ) {
+    const c = res.addMethod(method, new gateway.LambdaIntegration(fn), {
+      authorizationType: AuthorizationType.COGNITO
     })
-    this.projectsResource.addMethod(
+
+    const m = c.node.defaultChild as CfnMethod
+
+    m.addOverride('Properties.AuthorizerId', {
+      Ref: this.authorizer.logicalId
+    })
+  }
+
+  private buildProjectsAPI() {
+    // projects
+    this.projectsResource = this.api.root.addResource('projects')
+
+    this.wrapAuthorizer(
+      this.projectsResource,
       'GET',
-      new gateway.LambdaIntegration(functions.getProjectsFn),
-      {authorizationType: AuthorizationType.IAM}
+      this.functions.getProjectsFn
     )
-    this.projectsResource.addMethod(
+    this.wrapAuthorizer(
+      this.projectsResource,
       'POST',
-      new gateway.LambdaIntegration(functions.createProjectFn),
-      {authorizationType: AuthorizationType.IAM}
+      this.functions.createProjectFn
     )
 
     // projects/:projectId
-    this.projectResource = this.projectsResource.addResource('{projectId}', {
-      defaultCorsPreflightOptions: {
-        allowOrigins: gateway.Cors.ALL_ORIGINS,
-        allowMethods: gateway.Cors.ALL_METHODS,
-        allowHeaders: ['*']
-      }
-    })
-    this.projectResource.addMethod(
+    this.projectResource = this.projectsResource.addResource('{projectId}')
+
+    this.wrapAuthorizer(
+      this.projectResource,
       'GET',
-      new gateway.LambdaIntegration(functions.getProjectByIdFn),
-      {authorizationType: AuthorizationType.IAM}
+      this.functions.getProjectByIdFn
     )
     this.projectResource.addMethod('PUT')
     this.projectResource.addMethod('DELETE')

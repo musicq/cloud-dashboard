@@ -8,48 +8,38 @@ export class Functions extends cdk.Construct {
   getProjectsFn: lambda.Function
   getProjectByIdFn: lambda.Function
 
-  constructor(scope: cdk.Construct, id: string, db: Database) {
+  private defaultEnvironment: {[key: string]: string} = {
+    TABLE_NAME: this.db.table.tableName
+  }
+
+  constructor(scope: cdk.Construct, id: string, private db: Database) {
     super(scope, id)
 
-    this.helloFn = new lambda.Function(this, 'Hello', {
-      code: lambda.Code.fromAsset('./lambda'),
-      handler: 'functions/hello.main',
-      runtime: lambda.Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: db.table.tableName
-      }
-    })
+    this.helloFn = this.buildFunction('Hello', 'hello.main')
 
-    this.createProjectFn = new lambda.Function(this, 'CreateProject', {
-      code: lambda.Code.fromAsset('./lambda'),
-      handler: 'functions/project.create',
-      runtime: lambda.Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: db.table.tableName
-      }
-    })
-
-    this.getProjectsFn = new lambda.Function(this, 'GetProjects', {
-      code: lambda.Code.fromAsset('./lambda'),
-      handler: 'functions/project.get',
-      runtime: lambda.Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: db.table.tableName
-      }
-    })
-
-    this.getProjectByIdFn = new lambda.Function(this, 'GetProjectById', {
-      code: lambda.Code.fromAsset('./lambda'),
-      handler: 'functions/project.getById',
-      runtime: lambda.Runtime.NODEJS_12_X,
-      environment: {
-        TABLE_NAME: db.table.tableName
-      }
-    })
+    this.createProjectFn = this.buildFunction('CreateProject', 'project.create')
+    this.getProjectsFn = this.buildFunction('GetProjects', 'project.get')
+    this.getProjectByIdFn = this.buildFunction(
+      'GetProjectById',
+      'project.getById'
+    )
 
     db.table.grantReadWriteData(this.helloFn)
     db.table.grantWriteData(this.createProjectFn)
     db.table.grantReadData(this.getProjectsFn)
     db.table.grantReadData(this.getProjectByIdFn)
+  }
+
+  private buildFunction(
+    id: string,
+    handler: string,
+    environment = this.defaultEnvironment
+  ) {
+    return new lambda.Function(this, id, {
+      code: lambda.Code.fromAsset('./lambda'),
+      handler: `functions/${handler}`,
+      runtime: lambda.Runtime.NODEJS_12_X,
+      environment
+    })
   }
 }

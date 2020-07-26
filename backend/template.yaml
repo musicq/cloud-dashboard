@@ -151,7 +151,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
+          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
         S3Key:
           Fn::Join:
             - ""
@@ -159,12 +159,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
       Handler: functions/hello.main
       Role:
         Fn::GetAtt:
@@ -227,7 +227,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
+          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
         S3Key:
           Fn::Join:
             - ""
@@ -235,12 +235,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
       Handler: functions/project.create
       Role:
         Fn::GetAtt:
@@ -305,7 +305,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
+          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
         S3Key:
           Fn::Join:
             - ""
@@ -313,12 +313,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
       Handler: functions/project.get
       Role:
         Fn::GetAtt:
@@ -383,7 +383,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
+          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
         S3Key:
           Fn::Join:
             - ""
@@ -391,12 +391,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
       Handler: functions/project.getById
       Role:
         Fn::GetAtt:
@@ -449,14 +449,13 @@ Resources:
       - Gatewayclouddashboardapi28E919CB
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Account
-  GatewayclouddashboardapiDeployment9DF53C84cd8f34397001e0c8e9fa36487815d05f:
+  GatewayclouddashboardapiDeployment9DF53C84f2b3b680663232796f886b942c10fce7:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       Description: Automatically created by the RestApi construct
     DependsOn:
-      - GatewayclouddashboardapiANY124F647F
       - GatewayclouddashboardapiOPTIONSC4804E72
       - GatewayclouddashboardapiprojectsprojectIdDELETEA33BF838
       - GatewayclouddashboardapiprojectsprojectIdGET8CC3C45F
@@ -475,7 +474,7 @@ Resources:
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       DeploymentId:
-        Ref: GatewayclouddashboardapiDeployment9DF53C84cd8f34397001e0c8e9fa36487815d05f
+        Ref: GatewayclouddashboardapiDeployment9DF53C84f2b3b680663232796f886b942c10fce7
       StageName: prod
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/DeploymentStage.prod/Resource
@@ -508,21 +507,6 @@ Resources:
           StatusCode: "204"
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/OPTIONS/Resource
-  GatewayclouddashboardapiANY124F647F:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      HttpMethod: ANY
-      ResourceId:
-        Fn::GetAtt:
-          - Gatewayclouddashboardapi28E919CB
-          - RootResourceId
-      RestApiId:
-        Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: NONE
-      Integration:
-        Type: MOCK
-    Metadata:
-      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/ANY/Resource
   GatewayclouddashboardapiprojectsB814A665:
     Type: AWS::ApiGateway::Resource
     Properties:
@@ -618,7 +602,9 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: AWS_IAM
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId:
+        Ref: Gatewayclouddashboardauthorizer5730EC73
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -692,7 +678,9 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: AWS_IAM
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId:
+        Ref: Gatewayclouddashboardauthorizer5730EC73
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -803,7 +791,9 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: AWS_IAM
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId:
+        Ref: Gatewayclouddashboardauthorizer5730EC73
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -847,6 +837,20 @@ Resources:
         Type: MOCK
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/DELETE/Resource
+  Gatewayclouddashboardauthorizer5730EC73:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      RestApiId:
+        Ref: Gatewayclouddashboardapi28E919CB
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      Name: cloud-dashboard-authorizer
+      ProviderARNs:
+        - Fn::GetAtt:
+            - UserPoolclouddashboarduserpool8AB30D79
+            - Arn
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-authorizer
   Gatewayhello270BBC94:
     Type: AWS::ApiGateway::RestApi
     Properties:
@@ -1072,15 +1076,15 @@ Resources:
       Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-cognito=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F:
+  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC:
     Type: String
-    Description: S3 bucket for asset "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
-  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0:
+    Description: S3 bucket for asset "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
+  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64:
     Type: String
-    Description: S3 key for asset version "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
-  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622ArtifactHash416945CD:
+    Description: S3 key for asset version "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
+  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaArtifactHash3BB44589:
     Type: String
-    Description: Artifact hash for asset "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
+    Description: Artifact hash for asset "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
 Outputs:
   GatewayclouddashboardapiEndpoint257740C9:
     Value:

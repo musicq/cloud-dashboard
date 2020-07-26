@@ -151,7 +151,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
+          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
         S3Key:
           Fn::Join:
             - ""
@@ -159,12 +159,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
       Handler: functions/hello.main
       Role:
         Fn::GetAtt:
@@ -206,12 +206,6 @@ Resources:
       PolicyDocument:
         Statement:
           - Action:
-              - dynamodb:BatchGetItem
-              - dynamodb:GetRecords
-              - dynamodb:GetShardIterator
-              - dynamodb:Query
-              - dynamodb:GetItem
-              - dynamodb:Scan
               - dynamodb:BatchWriteItem
               - dynamodb:PutItem
               - dynamodb:UpdateItem
@@ -233,7 +227,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
+          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
         S3Key:
           Fn::Join:
             - ""
@@ -241,12 +235,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
       Handler: functions/project.create
       Role:
         Fn::GetAtt:
@@ -311,7 +305,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86
+          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
         S3Key:
           Fn::Join:
             - ""
@@ -319,12 +313,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
       Handler: functions/project.get
       Role:
         Fn::GetAtt:
@@ -340,6 +334,84 @@ Resources:
       - LambdaFunctionsGetProjectsServiceRole82D36FA3
     Metadata:
       aws:cdk:path: BackendStack/LambdaFunctions/GetProjects/Resource
+      aws:asset:path: /Users/musicqpee/github/cloud-dashboard/backend/lambda
+      aws:asset:property: Code
+  LambdaFunctionsGetProjectByIdServiceRole8171E6ED:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/GetProjectById/ServiceRole/Resource
+  LambdaFunctionsGetProjectByIdServiceRoleDefaultPolicy92F074A2:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:GetItem
+              - dynamodb:Scan
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - Databaseclouddashboardapps4A62326E
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: LambdaFunctionsGetProjectByIdServiceRoleDefaultPolicy92F074A2
+      Roles:
+        - Ref: LambdaFunctionsGetProjectByIdServiceRole8171E6ED
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/GetProjectById/ServiceRole/DefaultPolicy/Resource
+  LambdaFunctionsGetProjectById5287A6D7:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0
+      Handler: functions/project.getById
+      Role:
+        Fn::GetAtt:
+          - LambdaFunctionsGetProjectByIdServiceRole8171E6ED
+          - Arn
+      Runtime: nodejs12.x
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: Databaseclouddashboardapps4A62326E
+    DependsOn:
+      - LambdaFunctionsGetProjectByIdServiceRoleDefaultPolicy92F074A2
+      - LambdaFunctionsGetProjectByIdServiceRole8171E6ED
+    Metadata:
+      aws:cdk:path: BackendStack/LambdaFunctions/GetProjectById/Resource
       aws:asset:path: /Users/musicqpee/github/cloud-dashboard/backend/lambda
       aws:asset:property: Code
   Gatewayclouddashboardapi28E919CB:
@@ -377,7 +449,7 @@ Resources:
       - Gatewayclouddashboardapi28E919CB
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Account
-  GatewayclouddashboardapiDeployment9DF53C84ccbb5576509e9c6bdba560d5aa46ceb3:
+  GatewayclouddashboardapiDeployment9DF53C84cd8f34397001e0c8e9fa36487815d05f:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId:
@@ -385,11 +457,14 @@ Resources:
       Description: Automatically created by the RestApi construct
     DependsOn:
       - GatewayclouddashboardapiANY124F647F
+      - GatewayclouddashboardapiOPTIONSC4804E72
       - GatewayclouddashboardapiprojectsprojectIdDELETEA33BF838
       - GatewayclouddashboardapiprojectsprojectIdGET8CC3C45F
+      - GatewayclouddashboardapiprojectsprojectIdOPTIONSA2ACD20F
       - GatewayclouddashboardapiprojectsprojectIdPUTEF250BA5
       - GatewayclouddashboardapiprojectsprojectId13F84DA1
       - GatewayclouddashboardapiprojectsGETC8E5FD04
+      - GatewayclouddashboardapiprojectsOPTIONS6FF46935
       - GatewayclouddashboardapiprojectsPOST3451A7F0
       - GatewayclouddashboardapiprojectsB814A665
     Metadata:
@@ -400,10 +475,39 @@ Resources:
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
       DeploymentId:
-        Ref: GatewayclouddashboardapiDeployment9DF53C84ccbb5576509e9c6bdba560d5aa46ceb3
+        Ref: GatewayclouddashboardapiDeployment9DF53C84cd8f34397001e0c8e9fa36487815d05f
       StageName: prod
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/DeploymentStage.prod/Resource
+  GatewayclouddashboardapiOPTIONSC4804E72:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Fn::GetAtt:
+          - Gatewayclouddashboardapi28E919CB
+          - RootResourceId
+      RestApiId:
+        Ref: Gatewayclouddashboardapi28E919CB
+      AuthorizationType: NONE
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+            StatusCode: "204"
+        RequestTemplates:
+          application/json: "{ statusCode: 200 }"
+        Type: MOCK
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+          StatusCode: "204"
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/OPTIONS/Resource
   GatewayclouddashboardapiANY124F647F:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -431,6 +535,33 @@ Resources:
         Ref: Gatewayclouddashboardapi28E919CB
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/Resource
+  GatewayclouddashboardapiprojectsOPTIONS6FF46935:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: GatewayclouddashboardapiprojectsB814A665
+      RestApiId:
+        Ref: Gatewayclouddashboardapi28E919CB
+      AuthorizationType: NONE
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+            StatusCode: "204"
+        RequestTemplates:
+          application/json: "{ statusCode: 200 }"
+        Type: MOCK
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+          StatusCode: "204"
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/OPTIONS/Resource
   GatewayclouddashboardapiprojectsGETApiPermissionBackendStackGatewayclouddashboardapi53A67D4EGETprojects678DB002:
     Type: AWS::Lambda::Permission
     Properties:
@@ -487,7 +618,7 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: NONE
+      AuthorizationType: AWS_IAM
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -561,7 +692,7 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsB814A665
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: NONE
+      AuthorizationType: AWS_IAM
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS_PROXY
@@ -589,6 +720,81 @@ Resources:
         Ref: Gatewayclouddashboardapi28E919CB
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/Resource
+  GatewayclouddashboardapiprojectsprojectIdOPTIONSA2ACD20F:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
+      RestApiId:
+        Ref: Gatewayclouddashboardapi28E919CB
+      AuthorizationType: NONE
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'*'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
+            StatusCode: "204"
+        RequestTemplates:
+          application/json: "{ statusCode: 200 }"
+        Type: MOCK
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Origin: true
+            method.response.header.Access-Control-Allow-Methods: true
+          StatusCode: "204"
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/OPTIONS/Resource
+  GatewayclouddashboardapiprojectsprojectIdGETApiPermissionBackendStackGatewayclouddashboardapi53A67D4EGETprojectsprojectId75CBB360:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsGetProjectById5287A6D7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: Gatewayclouddashboardapi28E919CB
+            - /
+            - Ref: GatewayclouddashboardapiDeploymentStageprod9A3F2E8E
+            - /GET/projects/*
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/GET/ApiPermission.BackendStackGatewayclouddashboardapi53A67D4E.GET..projects.{projectId}
+  GatewayclouddashboardapiprojectsprojectIdGETApiPermissionTestBackendStackGatewayclouddashboardapi53A67D4EGETprojectsprojectIdE339D798:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - LambdaFunctionsGetProjectById5287A6D7
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:"
+            - Ref: AWS::Partition
+            - ":execute-api:"
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: Gatewayclouddashboardapi28E919CB
+            - /test-invoke-stage/GET/projects/*
+    Metadata:
+      aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/GET/ApiPermission.Test.BackendStackGatewayclouddashboardapi53A67D4E.GET..projects.{projectId}
   GatewayclouddashboardapiprojectsprojectIdGET8CC3C45F:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -597,9 +803,22 @@ Resources:
         Ref: GatewayclouddashboardapiprojectsprojectId13F84DA1
       RestApiId:
         Ref: Gatewayclouddashboardapi28E919CB
-      AuthorizationType: NONE
+      AuthorizationType: AWS_IAM
       Integration:
-        Type: MOCK
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - ":apigateway:"
+              - Ref: AWS::Region
+              - :lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - LambdaFunctionsGetProjectById5287A6D7
+                  - Arn
+              - /invocations
     Metadata:
       aws:cdk:path: BackendStack/Gateway/cloud-dashboard-api/Default/projects/{projectId}/GET/Resource
   GatewayclouddashboardapiprojectsprojectIdPUTEF250BA5:
@@ -853,15 +1072,15 @@ Resources:
       Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-cognito=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3Bucket0C516B86:
+  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3BucketA590F45F:
     Type: String
-    Description: S3 bucket for asset "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
-  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163S3VersionKey03CFAC35:
+    Description: S3 bucket for asset "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
+  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622S3VersionKey8FDA7BC0:
     Type: String
-    Description: S3 key for asset version "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
-  AssetParameters0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163ArtifactHash9A258B08:
+    Description: S3 key for asset version "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
+  AssetParametersebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622ArtifactHash416945CD:
     Type: String
-    Description: Artifact hash for asset "0fdda907b177e4c3db39b683ac585427f813f06124f0f63c3f0665de6009a163"
+    Description: Artifact hash for asset "ebb067fa32f8f232a5bf37864d337df835fb0add856b577660db170716580622"
 Outputs:
   GatewayclouddashboardapiEndpoint257740C9:
     Value:

@@ -43,6 +43,8 @@ export const create = async (event: AWSLambda.APIGatewayEvent) => {
 }
 
 export const get = async (event: AWSLambda.APIGatewayEvent) => {
+  console.log(event)
+
   const params: DynamoDB.DocumentClient.QueryInput = {
     TableName: process.env.TABLE_NAME!,
     KeyConditionExpression: 'username = :u',
@@ -55,6 +57,30 @@ export const get = async (event: AWSLambda.APIGatewayEvent) => {
 
   if (res instanceof Err) {
     return createResponse('Get projects failed.', 500)
+  }
+
+  return createResponse(res)
+}
+
+export const getById = async (event: AWSLambda.APIGatewayEvent) => {
+  console.log(event)
+
+  if (!event.pathParameters || Object.keys(event.pathParameters).length === 0) {
+    return createResponse('Need to specific project id', 400)
+  }
+
+  const params: DynamoDB.DocumentClient.QueryInput = {
+    TableName: process.env.TABLE_NAME!,
+    KeyConditionExpression: 'id = :id',
+    ExpressionAttributeValues: {
+      ':id': event.pathParameters.projectId
+    }
+  }
+
+  const res = await go(dynamo.query(params).promise())
+
+  if (res instanceof Err) {
+    return createResponse('Get project failed.', 500)
   }
 
   return createResponse(res)

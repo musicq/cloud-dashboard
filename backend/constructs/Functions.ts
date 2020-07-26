@@ -6,6 +6,7 @@ export class Functions extends cdk.Construct {
   helloFn: lambda.Function
   createProjectFn: lambda.Function
   getProjectsFn: lambda.Function
+  getProjectByIdFn: lambda.Function
 
   constructor(scope: cdk.Construct, id: string, db: Database) {
     super(scope, id)
@@ -37,8 +38,18 @@ export class Functions extends cdk.Construct {
       }
     })
 
+    this.getProjectByIdFn = new lambda.Function(this, 'GetProjectById', {
+      code: lambda.Code.fromAsset('./lambda'),
+      handler: 'functions/project.getById',
+      runtime: lambda.Runtime.NODEJS_12_X,
+      environment: {
+        TABLE_NAME: db.table.tableName
+      }
+    })
+
     db.table.grantReadWriteData(this.helloFn)
-    db.table.grantReadWriteData(this.createProjectFn)
+    db.table.grantWriteData(this.createProjectFn)
     db.table.grantReadData(this.getProjectsFn)
+    db.table.grantReadData(this.getProjectByIdFn)
   }
 }

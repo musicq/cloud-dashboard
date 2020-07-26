@@ -1,3 +1,4 @@
+import {EMPTY} from 'rxjs'
 import {catchError, map, pluck, switchMap, take} from 'rxjs/operators'
 import {
   errorHandler,
@@ -19,6 +20,10 @@ export function createProject(projectName: string) {
 }
 
 export function getProjectById(id: string) {
+  if (!id) {
+    return EMPTY
+  }
+
   return request(`projects/${id}`).pipe(
     catchError(errorHandlerWithDefaultValue({}))
   )

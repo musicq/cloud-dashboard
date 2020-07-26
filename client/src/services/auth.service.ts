@@ -1,3 +1,4 @@
+import {CognitoUserSession} from 'amazon-cognito-identity-js'
 import {Auth} from 'aws-amplify'
 import {from, of} from 'rxjs'
 import {switchMap, tap} from 'rxjs/operators'
@@ -5,7 +6,8 @@ import {Err, go} from '../shared/go'
 import {store} from '../store'
 
 const Actions = {
-  userInfo: 'userInfo'
+  userInfo: 'userInfo',
+  session: 'session'
 }
 
 interface IUserInfo {
@@ -41,6 +43,30 @@ function setUserInfo(userInfo: UserInfo) {
   }))
 }
 
+function getSession() {
+  return store.select<CognitoUserSession>(Actions.session).pipe(
+    switchMap(session =>
+      session
+        ? of(session)
+        : from(
+            Auth.currentSession().then(session => {
+              if (session) {
+                setSession(session)
+              }
+              return session
+            })
+          )
+    )
+  )
+}
+
+function setSession(session: CognitoUserSession) {
+  store.createReducer(state => ({
+    ...state,
+    [Actions.session]: session
+  }))
+}
+
 async function signIn(username: string, password: string): Promise<UserInfo> {
   const res = await go(
     Auth.signIn({
@@ -57,9 +83,11 @@ async function signIn(username: string, password: string): Promise<UserInfo> {
     return null
   }
 
-  const userInfo = await go(Auth.currentUserInfo())
+  const userInfo = await Auth.currentUserInfo()
+  const session = await Auth.currentSession()
 
   setUserInfo(userInfo)
+  setSession(session)
 
   return userInfo
 }
@@ -115,6 +143,7 @@ async function confirmSignUp(username: string, code: string): Promise<boolean> {
 }
 
 export const Auth$ = {
+  getSession,
   getUserInfo,
   signIn,
   signUp,

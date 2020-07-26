@@ -78,7 +78,7 @@ export const getById = withAuthenticate(
     }
 
     const params: DynamoDB.DocumentClient.QueryInput = {
-      TableName: process.env.TABLE_NAME!,
+      TableName,
       KeyConditionExpression: 'id = :id and username = :username',
       ExpressionAttributeValues: {
         ':username': event.token.data.userName,

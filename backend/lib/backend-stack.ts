@@ -10,7 +10,7 @@ export class BackendStack extends cdk.Stack {
 
     const cognito = new Cognito(this, 'UserPool')
     const database = new Database(this, 'Database')
-    const functions = new Functions(this, 'LambdaFunctions', database)
+    const functions = new Functions(this, 'LambdaFunctions', database, cognito, this.region)
     const gateway = new Gateway(this, 'Gateway', functions, cognito)
   }
 }

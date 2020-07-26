@@ -151,7 +151,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
+          Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3Bucket78260DD8
         S3Key:
           Fn::Join:
             - ""
@@ -159,12 +159,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
       Handler: functions/hello.main
       Role:
         Fn::GetAtt:
@@ -175,6 +175,10 @@ Resources:
         Variables:
           TABLE_NAME:
             Ref: Databaseclouddashboardapps4A62326E
+          REGION:
+            Ref: AWS::Region
+          USER_POOL_ID:
+            Ref: UserPoolclouddashboarduserpool8AB30D79
     DependsOn:
       - LambdaFunctionsHelloServiceRoleDefaultPolicy74F6E82A
       - LambdaFunctionsHelloServiceRole9A132DE5
@@ -227,7 +231,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
+          Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3Bucket78260DD8
         S3Key:
           Fn::Join:
             - ""
@@ -235,12 +239,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
       Handler: functions/project.create
       Role:
         Fn::GetAtt:
@@ -251,6 +255,10 @@ Resources:
         Variables:
           TABLE_NAME:
             Ref: Databaseclouddashboardapps4A62326E
+          REGION:
+            Ref: AWS::Region
+          USER_POOL_ID:
+            Ref: UserPoolclouddashboarduserpool8AB30D79
     DependsOn:
       - LambdaFunctionsCreateProjectServiceRoleDefaultPolicyBD1B0858
       - LambdaFunctionsCreateProjectServiceRoleE786CE0E
@@ -305,7 +313,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
+          Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3Bucket78260DD8
         S3Key:
           Fn::Join:
             - ""
@@ -313,12 +321,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
       Handler: functions/project.get
       Role:
         Fn::GetAtt:
@@ -329,6 +337,10 @@ Resources:
         Variables:
           TABLE_NAME:
             Ref: Databaseclouddashboardapps4A62326E
+          REGION:
+            Ref: AWS::Region
+          USER_POOL_ID:
+            Ref: UserPoolclouddashboarduserpool8AB30D79
     DependsOn:
       - LambdaFunctionsGetProjectsServiceRoleDefaultPolicy66B440CF
       - LambdaFunctionsGetProjectsServiceRole82D36FA3
@@ -383,7 +395,7 @@ Resources:
     Properties:
       Code:
         S3Bucket:
-          Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC
+          Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3Bucket78260DD8
         S3Key:
           Fn::Join:
             - ""
@@ -391,12 +403,12 @@ Resources:
                   - 0
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
               - Fn::Select:
                   - 1
                   - Fn::Split:
                       - "||"
-                      - Ref: AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64
+                      - Ref: AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825
       Handler: functions/project.getById
       Role:
         Fn::GetAtt:
@@ -407,6 +419,10 @@ Resources:
         Variables:
           TABLE_NAME:
             Ref: Databaseclouddashboardapps4A62326E
+          REGION:
+            Ref: AWS::Region
+          USER_POOL_ID:
+            Ref: UserPoolclouddashboarduserpool8AB30D79
     DependsOn:
       - LambdaFunctionsGetProjectByIdServiceRoleDefaultPolicy92F074A2
       - LambdaFunctionsGetProjectByIdServiceRole8171E6ED
@@ -1076,15 +1092,15 @@ Resources:
       Modules: aws-cdk=1.51.0,@aws-cdk/assets=1.51.0,@aws-cdk/aws-apigateway=1.51.0,@aws-cdk/aws-applicationautoscaling=1.51.0,@aws-cdk/aws-autoscaling-common=1.51.0,@aws-cdk/aws-cloudwatch=1.51.0,@aws-cdk/aws-cognito=1.51.0,@aws-cdk/aws-dynamodb=1.51.0,@aws-cdk/aws-ec2=1.51.0,@aws-cdk/aws-events=1.51.0,@aws-cdk/aws-iam=1.51.0,@aws-cdk/aws-kms=1.51.0,@aws-cdk/aws-lambda=1.51.0,@aws-cdk/aws-logs=1.51.0,@aws-cdk/aws-s3=1.51.0,@aws-cdk/aws-s3-assets=1.51.0,@aws-cdk/aws-sqs=1.51.0,@aws-cdk/aws-ssm=1.51.0,@aws-cdk/cloud-assembly-schema=1.51.0,@aws-cdk/core=1.51.0,@aws-cdk/custom-resources=1.51.0,@aws-cdk/cx-api=1.51.0,@aws-cdk/region-info=1.51.0,jsii-runtime=node.js/v12.18.2
     Condition: CDKMetadataAvailable
 Parameters:
-  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3Bucket154801CC:
+  AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3Bucket78260DD8:
     Type: String
-    Description: S3 bucket for asset "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
-  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaS3VersionKey82538D64:
+    Description: S3 bucket for asset "68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7"
+  AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7S3VersionKeyB871D825:
     Type: String
-    Description: S3 key for asset version "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
-  AssetParametersc4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefaArtifactHash3BB44589:
+    Description: S3 key for asset version "68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7"
+  AssetParameters68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7ArtifactHashADAC8EC5:
     Type: String
-    Description: Artifact hash for asset "c4d2c4ac3277aff46b14aead33b01e63a94c0496e028963c8671338f5894cefa"
+    Description: Artifact hash for asset "68fac4a8c81c4ab4068f1e99dc60793c84be6054158395b1ef424dedfdd2d9a7"
 Outputs:
   GatewayclouddashboardapiEndpoint257740C9:
     Value:

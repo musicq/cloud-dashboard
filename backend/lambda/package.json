@@ -1,9 +1,15 @@
 {
   "name": "lambda",
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.4",
+    "node-fetch": "^2.6.0",
     "uuid": "^8.2.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/jwk-to-pem": "^2.0.0",
+    "@types/node-fetch": "^2.5.7",
     "@types/uuid": "^8.0.0"
   }
 }

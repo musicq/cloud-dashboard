@@ -1,5 +1,6 @@
 import * as lambda from '@aws-cdk/aws-lambda'
 import * as cdk from '@aws-cdk/core'
+import {Cognito} from './Cognito'
 import {Database} from './Database'
 
 export class Functions extends cdk.Construct {
@@ -9,10 +10,18 @@ export class Functions extends cdk.Construct {
   getProjectByIdFn: lambda.Function
 
   private defaultEnvironment: {[key: string]: string} = {
-    TABLE_NAME: this.db.table.tableName
+    TABLE_NAME: this.db.table.tableName,
+    REGION: this.region,
+    USER_POOL_ID: this.cognito.userPool.userPoolId
   }
 
-  constructor(scope: cdk.Construct, id: string, private db: Database) {
+  constructor(
+    scope: cdk.Construct,
+    id: string,
+    private db: Database,
+    private cognito: Cognito,
+    private region: string
+  ) {
     super(scope, id)
 
     this.helloFn = this.buildFunction('Hello', 'hello.main')

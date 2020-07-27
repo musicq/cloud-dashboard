@@ -1,7 +1,6 @@
-import React from 'react'
+import React, {MouseEvent, MouseEventHandler, useState} from 'react'
 import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
-import {useProjectId} from './Dashboard.service'
 
 const item = () => ({
   // @ts-ignore
@@ -16,27 +15,69 @@ const item = () => ({
   }
 })
 
+type OperateItemIndex = [number, number] | null
+
+function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
+  if (a === null) {
+    return false
+  }
+
+  return a[0] === b[0] && a[1] === b[1]
+}
+
 export const Dashboard = () => {
-  const projectId = useProjectId()
-  // const project = useProject(projectId)
+  const [isDragging, setDragging] = useState(false)
+  const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
+    null
+  )
+  const [position, setPosition] = useState<[number, number]>([0, 0])
 
   const data = [[item(), item()], [item(), item(), item()], [item()]]
 
+  const onMouseMove: MouseEventHandler<HTMLDivElement> = e => {
+    setPosition([e.clientX - 100, e.clientY - 30])
+    console.log(e)
+  }
+
+  const onMouseDown = (
+    e: MouseEvent<HTMLDivElement>,
+    index: [number, number]
+  ) => {
+    setDragging(true)
+    setOperateItemIndex(index)
+    setPosition([e.clientX - 100, e.clientY - 30])
+
+    console.log(index)
+  }
+
+  const onMouseUp = () => {
+    setDragging(false)
+    setOperateItemIndex(null)
+  }
+
+  console.log('isDragging', isDragging)
   return (
     <AppBar>
       <div className="px-8 py-6">
         <div className="flex">
-          {data.map((col, index) => (
-            <div key={index} className="flex-1 px-2">
-              {col.map((item, i) => (
+          {data.map((col, colIndex) => (
+            <div key={colIndex} className="flex-1 px-2">
+              {col.map((item, index) => (
                 <Card
                   key={item.id}
                   className="mb-3"
-                  draggable
+                  isDragging={
+                    isDragging && isEqual(operateItemIndex, [colIndex, index])
+                  }
+                  position={position}
+                  collapse={isDragging}
                   title={item.title}
                   footer={{link: item.config.link, title: item.config.name}}
+                  onMouseDown={e => onMouseDown(e, [colIndex, index])}
+                  onMouseUp={onMouseUp}
+                  onMouseMove={onMouseMove}
                 >
-                  {index} - {i}
+                  {colIndex} - {index}
                   <span>{JSON.stringify(item.data)}</span>
                 </Card>
               ))}

@@ -3,10 +3,10 @@ import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
 
-const item = () => ({
+const item = (i: number) => ({
   // @ts-ignore
   id: Math.random().toString().substr(3).toString(16),
-  title: 'Introduce guide',
+  title: i.toString(),
   config: {link: 'https://google.com', name: 'Browse all lessons'},
   data: {
     a: 1,
@@ -18,14 +18,16 @@ const item = () => ({
 
 type OperateItemIndex = [number, number] | null
 
-const data = [[item(), item()], [item(), item(), item()], [item()]]
+const list = [[item(1), item(2)], [item(3), item(4), item(5)], [item(6)]]
 
 export const Dashboard = () => {
+  const [data, setData] = useState(list)
   const [isDragging, setDragging] = useState(false)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
   )
   const [position, setPosition] = useState<[number, number]>([0, 0])
+  const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
 
   const onPositionChange = (position: [number, number]) => {
     setPosition(position)
@@ -43,11 +45,32 @@ export const Dashboard = () => {
 
   const onMouseUp = () => {
     setDragging(false)
+
+    if (!operateItemIndex || !targetIndex) {
+      return
+    }
+
+    const [oldCol, oldIndex] = operateItemIndex
+    const [newCol, newIndex] = targetIndex
+
+    // change position
+    const oldColCopy = data[oldCol].slice()
+    const item = oldColCopy[oldIndex]
+    oldColCopy.splice(oldIndex, 1)
+    const newColCopy = data[newCol].slice()
+    newColCopy.splice(newIndex, 0, item)
+
+    const newData = data.slice()
+    newData[oldCol] = oldColCopy
+    newData[newCol] = newColCopy
+
+    setData(newData)
     setOperateItemIndex(null)
   }
 
   const onIndexChange = (index: [number, number]) => {
     console.log('new index:', index)
+    setTargetIndex(index)
   }
 
   return (

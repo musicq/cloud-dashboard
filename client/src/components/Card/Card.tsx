@@ -1,17 +1,24 @@
-import React, {MouseEventHandler} from 'react'
-import {MdArrowForward} from 'react-icons/md'
+import React, {
+  MouseEventHandler,
+  RefObject,
+  MouseEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} from 'react'
 import {classnames} from '../../shared/classnames'
 import {noop} from '../../shared/noop'
 import {CProps} from '../../types'
+import {CardFooter} from './CardFooter'
 
 interface CardProps {
   title: string
   footer?: {link: string; title: string}
   isDragging?: boolean
   collapse?: boolean
-  position?: [number, number]
+  onPositionChange?: (position: [number, number]) => void
   onMouseDown?: MouseEventHandler<HTMLDivElement>
-  onMouseMove?: MouseEventHandler<HTMLDivElement>
   onMouseUp?: MouseEventHandler<HTMLDivElement>
 }
 
@@ -22,71 +29,92 @@ const Placeholder = () => (
   <div className="border bg-white w-full h-16 shadow-inner mb-3" />
 )
 
-export const Card = ({
-  title,
-  footer,
-  isDragging = false,
-  collapse = false,
-  position = [0, 0],
-  className = '',
-  onMouseDown = noop,
-  onMouseMove = noop,
-  onMouseUp = noop,
-  children
-}: CProps<CardProps>) => {
-  const _onMouseMove: MouseEventHandler<HTMLDivElement> = e => {
-    if (!isDragging) return
+function usePosition(
+  ref: RefObject<HTMLDivElement>,
+  isDragging: boolean
+): [number, number] {
+  const [position, setPosition] = useState<[number, number]>([0, 0])
 
-    onMouseMove(e)
-  }
+  useLayoutEffect(() => {
+    if (!ref.current || !isDragging) {
+      return
+    }
 
-  const cardPosition = {
-    left: isDragging ? position[0] : 0,
-    top: isDragging ? position[1] : 0
-  }
+    const move = (e: MouseEvent<any>) => {
+      if (!ref.current || !isDragging) {
+        return
+      }
 
-  return (
-    <>
-      {isDragging && <Placeholder />}
+      const el = ref.current
 
-      <div
-        className={classnames(cardContainerCls, className, {
-          'absolute w-1/3 z-10 opacity-75': isDragging
-        })}
-        style={cardPosition}
-        onMouseDown={onMouseDown}
-        onMouseMove={_onMouseMove}
-        onMouseUp={onMouseUp}
-      >
+      const x = el.offsetWidth >> 1
+      const y = el.offsetHeight >> 1
+
+      el.style.left = e.clientX - x + 'px'
+      el.style.top = e.clientY - y + 'px'
+
+      setPosition([e.clientX, e.clientY])
+    }
+
+    document.addEventListener('mousemove', move as any)
+
+    return () => document.removeEventListener('mousemove', move as any)
+  }, [ref, isDragging])
+
+  return position
+}
+
+export const Card = React.memo(
+  ({
+    title,
+    footer,
+    isDragging = false,
+    collapse = false,
+    className = '',
+    onPositionChange = noop,
+    onMouseDown = noop,
+    onMouseUp = noop,
+    children
+  }: CProps<CardProps>) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const position = usePosition(ref, isDragging)
+
+    useEffect(() => {
+      onPositionChange(position)
+    }, [position, onPositionChange])
+
+    return (
+      <>
+        {isDragging && <Placeholder />}
+
         <div
-          className={classnames('text-2xl', 'p-4', 'h-16', 'overflow-hidden', {
-            'cursor-grab': !isDragging,
-            'cursor-grabbing': isDragging
+          ref={ref}
+          className={classnames(cardContainerCls, className, {
+            'absolute w-1/3 z-10 opacity-75': isDragging
           })}
         >
-          {title}
-        </div>
-
-        {!collapse && (
-          <>
-            <div className="px-4 pb-4">{children}</div>
-
-            {footer && (
-              <a
-                href={footer.link}
-                className="block border-t h-full w-full p-4 hover:bg-gray-100 transition-colors duration-300 ease-in-out"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <div className="flex items-center">
-                  <MdArrowForward className="mr-4 text-2xl" />
-                  {footer.title}
-                </div>
-              </a>
+          <div
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            className={classnames(
+              'text-2xl p-4 h-16 overflow-hidden',
+              isDragging ? 'cursor-grabbing' : 'cursor-grab'
             )}
-          </>
-        )}
-      </div>
-    </>
-  )
-}
+          >
+            {title}
+          </div>
+
+          {!collapse && (
+            <>
+              <div className="px-4 pb-4">{children}</div>
+
+              {footer && (
+                <CardFooter link={footer.link}>{footer.title}</CardFooter>
+              )}
+            </>
+          )}
+        </div>
+      </>
+    )
+  }
+)

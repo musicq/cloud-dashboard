@@ -1,4 +1,4 @@
-import React, {MouseEvent, MouseEventHandler, useState} from 'react'
+import React, {MouseEvent, useState} from 'react'
 import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
 
@@ -25,29 +25,27 @@ function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
   return a[0] === b[0] && a[1] === b[1]
 }
 
+const data = [[item(), item()], [item(), item(), item()], [item()]]
+
 export const Dashboard = () => {
   const [isDragging, setDragging] = useState(false)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
   )
-  const [position, setPosition] = useState<[number, number]>([0, 0])
+  const [position, setPosition] = useState([0, 0])
 
-  const data = [[item(), item()], [item(), item(), item()], [item()]]
-
-  const onMouseMove: MouseEventHandler<HTMLDivElement> = e => {
-    setPosition([e.clientX - 100, e.clientY - 30])
-    console.log(e)
+  const onPositionChange = (position: [number, number]) => {
+    setPosition(position)
   }
 
   const onMouseDown = (
     e: MouseEvent<HTMLDivElement>,
     index: [number, number]
   ) => {
+    console.log(index)
+
     setDragging(true)
     setOperateItemIndex(index)
-    setPosition([e.clientX - 100, e.clientY - 30])
-
-    console.log(index)
   }
 
   const onMouseUp = () => {
@@ -55,7 +53,8 @@ export const Dashboard = () => {
     setOperateItemIndex(null)
   }
 
-  console.log('isDragging', isDragging)
+  console.log(position)
+
   return (
     <AppBar>
       <div className="px-8 py-6">
@@ -69,13 +68,12 @@ export const Dashboard = () => {
                   isDragging={
                     isDragging && isEqual(operateItemIndex, [colIndex, index])
                   }
-                  position={position}
                   collapse={isDragging}
                   title={item.title}
                   footer={{link: item.config.link, title: item.config.name}}
                   onMouseDown={e => onMouseDown(e, [colIndex, index])}
                   onMouseUp={onMouseUp}
-                  onMouseMove={onMouseMove}
+                  onPositionChange={onPositionChange}
                 >
                   {colIndex} - {index}
                   <span>{JSON.stringify(item.data)}</span>

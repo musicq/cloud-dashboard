@@ -71,7 +71,10 @@ export function DetectionArea({
   }, [ref, position])
 
   useEffect(() => {
-    onChange(index)
+    // only pass the active one index
+    if (active) {
+      onChange(index)
+    }
   }, [active])
 
   return (

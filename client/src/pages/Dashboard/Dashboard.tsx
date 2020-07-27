@@ -50,22 +50,11 @@ export const Dashboard = () => {
       return
     }
 
-    const [oldCol, oldIndex] = operateItemIndex
-    const [newCol, newIndex] = targetIndex
-
-    // change position
-    const oldColCopy = data[oldCol].slice()
-    const item = oldColCopy[oldIndex]
-    oldColCopy.splice(oldIndex, 1)
-    const newColCopy = data[newCol].slice()
-    newColCopy.splice(newIndex, 0, item)
-
-    const newData = data.slice()
-    newData[oldCol] = oldColCopy
-    newData[newCol] = newColCopy
+    const newData = exchange(data, operateItemIndex, targetIndex)
 
     setData(newData)
     setOperateItemIndex(null)
+    setTargetIndex(null)
   }
 
   const onIndexChange = (index: [number, number]) => {
@@ -113,7 +102,7 @@ export const Dashboard = () => {
                       last={index === col.length - 1}
                       left={colIndex === 0}
                       right={colIndex === data.length - 1}
-                      index={[colIndex, index]}
+                      index={[colIndex, index + 1]}
                       position={position}
                       onChange={onIndexChange}
                     />
@@ -134,4 +123,41 @@ function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
   }
 
   return a[0] === b[0] && a[1] === b[1]
+}
+
+function exchange<T>(
+  list: Array<T[]>,
+  srcIndex: OperateItemIndex,
+  targetIndex: OperateItemIndex
+): Array<T[]> {
+  if (!srcIndex || !targetIndex) {
+    return list
+  }
+
+  const listCopy = list.slice()
+
+  const [srcCol, srcIdx] = srcIndex
+  const [targetCol, targetIdx] = targetIndex
+
+  if (srcCol === targetCol) {
+    const col = listCopy[srcCol].slice()
+    const item = col[srcIdx]
+    col.splice(srcIdx, 1)
+    col.splice(targetIdx, 0, item)
+
+    listCopy[srcCol] = col
+  } else {
+    const srcCols = listCopy[srcCol].slice()
+    const item = srcCols[srcIdx]
+
+    const targetCols = listCopy[targetCol].slice()
+
+    srcCols.splice(srcIdx, 1)
+    targetCols.splice(targetIdx, 0, item)
+
+    listCopy[srcCol] = srcCols
+    listCopy[targetCol] = targetCols
+  }
+
+  return listCopy
 }

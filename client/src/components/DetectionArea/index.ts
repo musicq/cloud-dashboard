@@ -1,0 +1,1 @@
+export {DetectionArea} from './DetectionArea'

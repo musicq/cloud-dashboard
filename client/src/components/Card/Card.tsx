@@ -23,7 +23,7 @@ interface CardProps {
 }
 
 const cardContainerCls =
-  'bg-white border duration-300 ease-in-out hover:shadow-lg overflow-hidden shadow-md transition-shadow select-none'
+  'bg-white duration-300 ease-in-out hover:shadow-lg overflow-hidden shadow-md transition-shadow select-none'
 
 const Placeholder = () => (
   <div className="border bg-white w-full h-16 shadow-inner mb-3" />
@@ -81,7 +81,7 @@ export const Card = React.memo(
 
     useEffect(() => {
       onPositionChange(position)
-    }, [position, onPositionChange])
+    }, [position])
 
     return (
       <>

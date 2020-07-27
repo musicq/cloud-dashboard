@@ -1,6 +1,7 @@
-import React, {MouseEvent, useState} from 'react'
+import React, {Fragment, MouseEvent, useState} from 'react'
 import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
+import {DetectionArea} from '../../components/DetectionArea'
 
 const item = () => ({
   // @ts-ignore
@@ -17,14 +18,6 @@ const item = () => ({
 
 type OperateItemIndex = [number, number] | null
 
-function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
-  if (a === null) {
-    return false
-  }
-
-  return a[0] === b[0] && a[1] === b[1]
-}
-
 const data = [[item(), item()], [item(), item(), item()], [item()]]
 
 export const Dashboard = () => {
@@ -32,7 +25,7 @@ export const Dashboard = () => {
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
   )
-  const [position, setPosition] = useState([0, 0])
+  const [position, setPosition] = useState<[number, number]>([0, 0])
 
   const onPositionChange = (position: [number, number]) => {
     setPosition(position)
@@ -53,7 +46,9 @@ export const Dashboard = () => {
     setOperateItemIndex(null)
   }
 
-  console.log(position)
+  const onIndexChange = (index: [number, number]) => {
+    console.log('new index:', index)
+  }
 
   return (
     <AppBar>
@@ -62,22 +57,45 @@ export const Dashboard = () => {
           {data.map((col, colIndex) => (
             <div key={colIndex} className="flex-1 px-2">
               {col.map((item, index) => (
-                <Card
-                  key={item.id}
-                  className="mb-3"
-                  isDragging={
-                    isDragging && isEqual(operateItemIndex, [colIndex, index])
-                  }
-                  collapse={isDragging}
-                  title={item.title}
-                  footer={{link: item.config.link, title: item.config.name}}
-                  onMouseDown={e => onMouseDown(e, [colIndex, index])}
-                  onMouseUp={onMouseUp}
-                  onPositionChange={onPositionChange}
-                >
-                  {colIndex} - {index}
-                  <span>{JSON.stringify(item.data)}</span>
-                </Card>
+                <Fragment key={item.id}>
+                  {isDragging && index === 0 && (
+                    <DetectionArea
+                      first
+                      left={colIndex === 0}
+                      right={colIndex === data.length - 1}
+                      index={[colIndex, 0]}
+                      position={position}
+                      onChange={onIndexChange}
+                    />
+                  )}
+
+                  <Card
+                    className="mb-3"
+                    isDragging={
+                      isDragging && isEqual(operateItemIndex, [colIndex, index])
+                    }
+                    collapse={isDragging}
+                    title={item.title}
+                    footer={{link: item.config.link, title: item.config.name}}
+                    onMouseDown={e => onMouseDown(e, [colIndex, index])}
+                    onMouseUp={onMouseUp}
+                    onPositionChange={onPositionChange}
+                  >
+                    {colIndex} - {index}
+                    <span>{JSON.stringify(item.data)}</span>
+                  </Card>
+
+                  {isDragging && (
+                    <DetectionArea
+                      last={index === col.length - 1}
+                      left={colIndex === 0}
+                      right={colIndex === data.length - 1}
+                      index={[colIndex, index]}
+                      position={position}
+                      onChange={onIndexChange}
+                    />
+                  )}
+                </Fragment>
               ))}
             </div>
           ))}
@@ -85,4 +103,12 @@ export const Dashboard = () => {
       </div>
     </AppBar>
   )
+}
+
+function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
+  if (a === null) {
+    return false
+  }
+
+  return a[0] === b[0] && a[1] === b[1]
 }

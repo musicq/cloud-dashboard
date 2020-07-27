@@ -1,15 +1,8 @@
-import React, {
-  MouseEventHandler,
-  RefObject,
-  MouseEvent,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState
-} from 'react'
+import React, {MouseEventHandler, useEffect, useRef} from 'react'
 import {classnames} from '../../shared/classnames'
 import {noop} from '../../shared/noop'
 import {CProps} from '../../types'
+import {usePosition} from './Card.service'
 import {CardFooter} from './CardFooter'
 
 interface CardProps {
@@ -22,47 +15,9 @@ interface CardProps {
   onMouseUp?: MouseEventHandler<HTMLDivElement>
 }
 
-const cardContainerCls =
-  'bg-white duration-300 ease-in-out hover:shadow-lg overflow-hidden shadow-md transition-shadow select-none'
-
 const Placeholder = () => (
   <div className="border bg-white w-full h-16 shadow-inner mb-3" />
 )
-
-function usePosition(
-  ref: RefObject<HTMLDivElement>,
-  isDragging: boolean
-): [number, number] {
-  const [position, setPosition] = useState<[number, number]>([0, 0])
-
-  useLayoutEffect(() => {
-    if (!ref.current || !isDragging) {
-      return
-    }
-
-    const move = (e: MouseEvent<any>) => {
-      if (!ref.current || !isDragging) {
-        return
-      }
-
-      const el = ref.current
-
-      const x = el.offsetWidth >> 1
-      const y = el.offsetHeight >> 1
-
-      el.style.left = e.clientX - x + 'px'
-      el.style.top = e.clientY - y + 'px'
-
-      setPosition([e.clientX, e.clientY])
-    }
-
-    document.addEventListener('mousemove', move as any)
-
-    return () => document.removeEventListener('mousemove', move as any)
-  }, [ref, isDragging])
-
-  return position
-}
 
 export const Card = React.memo(
   ({
@@ -89,9 +44,11 @@ export const Card = React.memo(
 
         <div
           ref={ref}
-          className={classnames(cardContainerCls, className, {
-            'absolute w-1/3 z-10 opacity-75': isDragging
-          })}
+          className={classnames(
+            'bg-white duration-300 ease-in-out hover:shadow-lg overflow-hidden shadow-md transition-shadow select-none',
+            className,
+            {'absolute w-1/3 z-10 opacity-75': isDragging}
+          )}
         >
           <div
             onMouseDown={onMouseDown}

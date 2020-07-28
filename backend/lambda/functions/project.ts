@@ -55,10 +55,11 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
 export const get = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
   const params: DynamoDB.DocumentClient.QueryInput = {
     TableName,
-    KeyConditionExpression: 'username = :u',
+    KeyConditionExpression: 'username = :username',
     ExpressionAttributeValues: {
-      ':u': event.token.data.userName
-    }
+      ':username': event.token.data.userName
+    },
+    ProjectionExpression: 'username,id,projectName,createAt'
   }
 
   const res = await go(dynamo.query(params).promise())

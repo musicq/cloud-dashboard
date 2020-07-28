@@ -57,7 +57,8 @@ export class Gateway extends cdk.Construct {
     method: string,
     fn: lambda.Function
   ) {
-    // see: https://stackoverflow.com/questions/52726914/aws-cdk-user-pool-authorizer
+    // see:
+    // https://stackoverflow.com/questions/52726914/aws-cdk-user-pool-authorizer
     const c = res.addMethod(method, new gateway.LambdaIntegration(fn), {
       authorizationType: AuthorizationType.COGNITO
     })

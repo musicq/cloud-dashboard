@@ -33,7 +33,7 @@ export const AppBar = ({
 
   return (
     <div>
-      <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center">
+      <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center fixed w-full">
         <div className="flex items-center">
           <Logo reverse />
 
@@ -74,7 +74,7 @@ export const AppBar = ({
         )}
       </div>
 
-      <div className="overflow-y-auto">{children}</div>
+      <div className="overflow-y-auto pt-12">{children}</div>
     </div>
   )
 }

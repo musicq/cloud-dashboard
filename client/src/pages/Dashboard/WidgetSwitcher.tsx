@@ -2,16 +2,21 @@ import React from 'react'
 import {APIWidget} from '../../components/APIWidget'
 import {ProjectInfo} from '../../components/ProjectInfo'
 import {ResourceWidget} from '../../components/ResourceWidget'
-import {SQLWidget} from '../../components/SQLWidget/SQLWidget'
+import {SQLWidget} from '../../components/SQLWidget'
 import {WidgetTypes} from '../../services/projects.service'
-import {CProps} from '../../types'
+import {CProps, WidgetProps} from '../../types'
 
-interface WidgetSwitcherProps {
+interface WidgetSwitcherProps extends WidgetProps {
   type: WidgetTypes
-  data: any
 }
 
-export const WidgetSwitcher = ({type, data}: CProps<WidgetSwitcherProps>) => {
+export const WidgetSwitcher = ({
+  id,
+  edit,
+  type,
+  data,
+  onChange
+}: CProps<WidgetSwitcherProps>) => {
   let View = null
 
   switch (type) {
@@ -31,6 +36,5 @@ export const WidgetSwitcher = ({type, data}: CProps<WidgetSwitcherProps>) => {
       return null
   }
 
-  // @ts-ignore
-  return <View data={data} />
+  return <View id={id} edit={edit} data={data} onChange={onChange}/>
 }

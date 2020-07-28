@@ -11,7 +11,8 @@ export type CProps<P> = Readonly<
 export type Pos = [number, number]
 
 export interface WidgetProps {
+  id: string
   edit?: boolean
   data?: any
-  onChange: (data: any) => void
+  onChange: ({id, data}: {id: string; data: any}) => void
 }

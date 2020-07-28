@@ -1,6 +1,7 @@
 import React, {Fragment, MouseEvent, useCallback, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {AppBar} from '../../components/AppBar'
+import {Button} from '../../components/Button'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
 import {Spinner} from '../../components/Spinner'
@@ -30,6 +31,7 @@ export const Dashboard = () => {
   const [position, setPosition] = useState<Pos>([0, 0])
   const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
   const [resources, setResources] = useResources(project)
+  const [edit, setEdit] = useState(false)
 
   const cancelDragging = useCallback(() => {
     setDragging(false)
@@ -71,6 +73,31 @@ export const Dashboard = () => {
   const onProjectChange = (id: string) =>
     history.push('/dashboard?projectId=' + id)
 
+  const onEdit = () => setEdit(true)
+
+  const onSave = () => {
+    setEdit(false)
+
+    updateProjectResourcesById(projectId, resources).subscribe(
+      () => console.log('Saved successfully.'),
+      e => console.error('Save failed.')
+    )
+  }
+
+  const onDataChange = ({id, data}: {id: string; data: any}) => {
+    const newResources = resources.slice().map(resource =>
+      resource.map(r => {
+        if (r.id === id) {
+          return {...r, data}
+        }
+
+        return r
+      })
+    )
+
+    setResources(newResources)
+  }
+
   return (
     <AppBar
       projects={projects}
@@ -84,7 +111,13 @@ export const Dashboard = () => {
       ) : (
         <>
           {project?.projectName && (
-            <div className="border-b p-4 text-3xl">{project.projectName}</div>
+            <div className="flex justify-between border-b p-4 ">
+              <div className="text-3xl">{project.projectName}</div>
+
+              <Button onClick={edit ? onSave : onEdit}>
+                {edit ? 'Save' : 'Customize'}
+              </Button>
+            </div>
           )}
 
           <div className="px-8 py-6">
@@ -113,7 +146,13 @@ export const Dashboard = () => {
                         onMouseDown={e => onMouseDown(e, [colIndex, index])}
                         onPositionChange={onPositionChange}
                       >
-                        <WidgetSwitcher type={item.type} data={item.data} />
+                        <WidgetSwitcher
+                          id={item.id}
+                          edit={edit}
+                          type={item.type}
+                          data={item.data}
+                          onChange={onDataChange}
+                        />
                       </Card>
 
                       {isDragging && (

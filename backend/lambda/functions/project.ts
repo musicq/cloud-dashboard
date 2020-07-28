@@ -37,6 +37,33 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
 
   const {projectName, username} = data
 
+  const queryParams: DynamoDB.DocumentClient.QueryInput = {
+    TableName,
+    KeyConditionExpression: 'username = :username',
+    ExpressionAttributeValues: {
+      ':username': event.token.data.userName
+    }
+  }
+
+  const queryRes = await go(dynamo.query(queryParams).promise())
+
+  if (queryRes instanceof Err) {
+    console.error(`Create project failed.\nData: ${event.body}\n`, queryRes.e)
+
+    return createResponse('Create project failed.', 500)
+  }
+
+  if (
+    queryRes.Items &&
+    queryRes.Items.length > 0 &&
+    queryRes.Items.find(item => item.projectName === projectName)
+  ) {
+    return createResponse(
+      `Project with name ${projectName} is existed. Please using a unique one`,
+      400
+    )
+  }
+
   const params: DynamoDB.DocumentClient.PutItemInput = {
     TableName,
     Item: {

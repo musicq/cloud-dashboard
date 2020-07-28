@@ -44,7 +44,7 @@ export class Functions extends cdk.Construct {
     )
 
     db.table.grantReadWriteData(this.helloFn)
-    db.table.grantWriteData(this.createProjectFn)
+    db.table.grantReadWriteData(this.createProjectFn)
     db.table.grantReadData(this.getProjectsFn)
     db.table.grantReadData(this.getProjectByIdFn)
     db.table.grantWriteData(this.updateProjectByIdFn)

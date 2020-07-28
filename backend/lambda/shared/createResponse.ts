@@ -10,9 +10,11 @@ export function createResponse(
   statusCode: number = 200,
   headers: {[key: string]: string} = defaultHeaders
 ) {
+  const resBody = typeof body === 'string' ? {msg: body} : body
+
   return {
     statusCode,
     headers,
-    body: typeof body === 'string' ? body : JSON.stringify(body)
+    body: JSON.stringify(resBody)
   }
 }

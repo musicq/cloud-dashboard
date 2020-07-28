@@ -1,9 +1,10 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useLayoutEffect, useState} from 'react'
 import {useLocation} from 'react-router-dom'
 import {getProjectById} from '../../services/projects.service'
 import {qs} from '../../shared/qs'
+import {Pos} from '../../types'
 
-export type OperateItemIndex = [number, number] | null
+export type OperateItemIndex = Pos | null
 
 export function useProjectId() {
   const location = useLocation()
@@ -61,10 +62,18 @@ export function exchange<T>(
   return listCopy
 }
 
-export function isEqual(a: OperateItemIndex, b: [number, number]): boolean {
+export function isEqual(a: OperateItemIndex, b: Pos): boolean {
   if (a === null) {
     return false
   }
 
   return a[0] === b[0] && a[1] === b[1]
+}
+
+export function useListenMouseUpEvent(cb: Function) {
+  useLayoutEffect(() => {
+    document.addEventListener('mouseup', cb as any)
+
+    return () => document.removeEventListener('mouseup', cb as any)
+  }, [cb])
 }

@@ -1,10 +1,11 @@
 import {MouseEvent, RefObject, useLayoutEffect, useState} from 'react'
+import {Pos} from '../../types'
 
 export function usePosition(
   ref: RefObject<HTMLDivElement>,
   isDragging: boolean
-): [number, number] {
-  const [position, setPosition] = useState<[number, number]>([0, 0])
+): Pos {
+  const [position, setPosition] = useState<Pos>([0, 0])
 
   useLayoutEffect(() => {
     if (!ref.current || !isDragging) {

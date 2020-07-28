@@ -7,3 +7,5 @@ export type CProps<P> = Readonly<
       style: CSSProperties
     }>
 >
+
+export type Pos = [number, number]

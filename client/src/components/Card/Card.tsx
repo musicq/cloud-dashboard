@@ -1,7 +1,7 @@
 import React, {MouseEventHandler, useEffect, useRef} from 'react'
 import {classnames} from '../../shared/classnames'
 import {noop} from '../../shared/noop'
-import {CProps} from '../../types'
+import {CProps, Pos} from '../../types'
 import {usePosition} from './Card.service'
 import {CardFooter} from './CardFooter'
 
@@ -10,9 +10,8 @@ interface CardProps {
   footer?: {link: string; title: string}
   isDragging?: boolean
   collapse?: boolean
-  onPositionChange?: (position: [number, number]) => void
+  onPositionChange?: (position: Pos) => void
   onMouseDown?: MouseEventHandler<HTMLDivElement>
-  onMouseUp?: MouseEventHandler<HTMLDivElement>
 }
 
 const Placeholder = () => (
@@ -28,7 +27,6 @@ export const Card = React.memo(
     className = '',
     onPositionChange = noop,
     onMouseDown = noop,
-    onMouseUp = noop,
     children
   }: CProps<CardProps>) => {
     const ref = useRef<HTMLDivElement>(null)
@@ -52,7 +50,6 @@ export const Card = React.memo(
         >
           <div
             onMouseDown={onMouseDown}
-            onMouseUp={onMouseUp}
             className={classnames(
               'text-2xl p-4 h-16 overflow-hidden',
               isDragging ? 'cursor-grabbing' : 'cursor-grab'

@@ -102,6 +102,11 @@ export const LoginForm = () => {
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
+            {type === Type.Register && (
+              <div className="text-gray-600 text-sm">
+                Password pattern: Passw0rd!
+              </div>
+            )}
 
             {type === Type.Register && (
               <TextInput
@@ -128,6 +133,10 @@ export const LoginForm = () => {
               value={code}
               onChange={e => setCode(e.target.value)}
             />
+
+            <div className="text-gray-600 text-sm">
+              If you cannot get the email, please check your junk.
+            </div>
           </>
         )}
 

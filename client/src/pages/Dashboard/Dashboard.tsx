@@ -4,6 +4,7 @@ import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
 import {Spinner} from '../../components/Spinner'
+import {updateProjectResourcesById} from '../../services/projects.service'
 import {Pos} from '../../types'
 import {
   exchange,
@@ -39,6 +40,10 @@ export const Dashboard = () => {
     setResources(newResources)
     setOperateItemIndex(null)
     setTargetIndex(null)
+
+    updateProjectResourcesById(projectId, newResources).subscribe({
+      error: e => console.error('Update project resources failed.', e)
+    })
   }, [
     operateItemIndex,
     targetIndex,

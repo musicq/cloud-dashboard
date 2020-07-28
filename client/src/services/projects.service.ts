@@ -68,3 +68,17 @@ export function getProjectById(id: string) {
     catchError(errorHandlerWithDefaultValue({}))
   )
 }
+
+export function updateProjectResourcesById(
+  id: string,
+  resources: WidgetsLayout
+) {
+  if (!id) {
+    return EMPTY
+  }
+
+  return request(`projects/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(resources)
+  }).pipe(catchError(errorHandler))
+}

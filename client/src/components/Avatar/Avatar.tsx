@@ -29,7 +29,7 @@ export const Avatar = ({user}: CProps<AvatarProps>) => {
       </div>
 
       {visible && (
-        <div className="absolute bg-white content-between mr-2 mt-12 right-0 shadow-md top-0 w-1/3">
+        <div className="absolute bg-white content-between mr-2 mt-12 right-0 shadow-md top-0 w-64">
           <div className="flex p-3">
             <MdPerson className="text-3xl text-6xl text-gray-800" />
 

@@ -17,6 +17,10 @@ export const NewProject = () => {
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
 
+    if (!projectName || !projectName.trim()) {
+      return
+    }
+
     setLoading(true)
     createProject(projectName).subscribe(res => {
       setLoading(false)

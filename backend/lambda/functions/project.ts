@@ -64,14 +64,22 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
     )
   }
 
+  const items = {
+    username,
+    id: v4(),
+    projectName,
+    createdAt: Date.now()
+  }
+
   const params: DynamoDB.DocumentClient.PutItemInput = {
     TableName,
     Item: {
-      username,
-      id: v4(),
-      projectName,
-      createdAt: Date.now(),
-      resources: createNewWidgetsTemplate()
+      ...items,
+      resources: createNewWidgetsTemplate({
+        projectInfoData: items,
+        APIData: {source: 'https://google.com'},
+        SQLData: {source: 'https://baidu.com'}
+      })
     }
   }
 

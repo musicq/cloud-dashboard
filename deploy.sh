@@ -1,6 +1,7 @@
 #!/bin/bash
 
 git checkout deploy
+git merge master
 
 rm -rf ./build
 
@@ -13,3 +14,7 @@ git add ../*
 version="$(date)"
 
 git cm "$version"
+
+git push origin deploy
+
+git checkout master

@@ -1,6 +1,9 @@
 {
   "name": "cloud-dashboard",
   "author": "liang kui",
+  "scripts": {
+    "deploy": "bash deploy.sh"
+  },
   "devDependencies": {
     "prettier": "^2.0.5"
   }

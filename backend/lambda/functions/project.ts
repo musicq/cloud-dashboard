@@ -1,5 +1,6 @@
 import {DynamoDB} from 'aws-sdk'
 import {v4} from 'uuid'
+import {createNewWidgetsTemplate} from '../shared/createNewWidgetsTemplate'
 import {createResponse} from '../shared/createResponse'
 import {Err, go} from '../shared/go'
 import {
@@ -35,7 +36,8 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
       username,
       id: v4(),
       projectName,
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      resources: createNewWidgetsTemplate()
     }
   }
 
@@ -77,16 +79,15 @@ export const getById = withAuthenticate(
       return createResponse('Need to specific project id', 400)
     }
 
-    const params: DynamoDB.DocumentClient.QueryInput = {
+    const params: DynamoDB.DocumentClient.GetItemInput = {
       TableName,
-      KeyConditionExpression: 'id = :id and username = :username',
-      ExpressionAttributeValues: {
-        ':username': event.token.data.userName,
-        ':id': event.pathParameters.projectId
+      Key: {
+        username: event.token.data.userName,
+        id: event.pathParameters.projectId
       }
     }
 
-    const res = await go(dynamo.query(params).promise())
+    const res = await go(dynamo.get(params).promise())
 
     if (res instanceof Err) {
       return createResponse(

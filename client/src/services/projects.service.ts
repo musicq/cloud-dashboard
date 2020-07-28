@@ -7,6 +7,38 @@ import {
 } from '../shared/http'
 import {Auth$} from './auth.service'
 
+export enum WidgetTypes {
+  Resource,
+  API,
+  SQL,
+  ProjectInfo,
+  News,
+  Status
+}
+
+export interface WidgetConfig {
+  link?: string
+  name?: string
+}
+
+export interface Widget {
+  id: string
+  type: WidgetTypes
+  title: string
+  config?: WidgetConfig
+  data: {[key: string]: any}
+}
+
+export type WidgetsLayout = Array<Widget[]>
+
+export interface Project {
+  createdAt: string
+  id: string
+  projectName: string
+  resources: WidgetsLayout
+  username: string
+}
+
 const username$ = Auth$.getUserInfo().pipe(pluck('username'))
 
 export function createProject(projectName: string) {
@@ -25,6 +57,7 @@ export function getProjectById(id: string) {
   }
 
   return request(`projects/${id}`).pipe(
+    map(res => res.Item),
     catchError(errorHandlerWithDefaultValue({}))
   )
 }

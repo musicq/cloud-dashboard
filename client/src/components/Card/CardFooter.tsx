@@ -3,7 +3,7 @@ import {MdArrowForward} from 'react-icons/md'
 import {CProps} from '../../types'
 
 interface CardFooterProps {
-  link: string
+  link?: string
 }
 
 export const CardFooter = ({link, children}: CProps<CardFooterProps>) => {
@@ -15,7 +15,7 @@ export const CardFooter = ({link, children}: CProps<CardFooterProps>) => {
       rel="noopener noreferrer"
     >
       <div className="flex items-center">
-        <MdArrowForward className="mr-4 text-2xl"/>
+        <MdArrowForward className="mr-4 text-2xl" />
         {children}
       </div>
     </a>

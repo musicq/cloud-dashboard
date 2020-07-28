@@ -1,6 +1,10 @@
 import {useEffect, useLayoutEffect, useState} from 'react'
 import {useLocation} from 'react-router-dom'
-import {getProjectById} from '../../services/projects.service'
+import {
+  getProjectById,
+  Project,
+  WidgetsLayout
+} from '../../services/projects.service'
 import {qs} from '../../shared/qs'
 import {Pos} from '../../types'
 
@@ -13,16 +17,21 @@ export function useProjectId() {
   return qs(search).projectId
 }
 
-export function useProject(id: string) {
-  const [project, setProject] = useState(null)
+export function useProject(id: string): [boolean, Project?] {
+  const [loading, setLoading] = useState(false)
+  const [project, setProject] = useState<Project>()
 
   useEffect(() => {
-    const sub = getProjectById(id).subscribe(res => setProject(res))
+    setLoading(true)
+    const sub = getProjectById(id).subscribe(res => {
+      setProject(res)
+      setLoading(false)
+    })
 
     return () => sub.unsubscribe()
   }, [id])
 
-  return project
+  return [loading, project]
 }
 
 export function exchange<T>(
@@ -76,4 +85,14 @@ export function useListenMouseUpEvent(cb: Function) {
 
     return () => document.removeEventListener('mouseup', cb as any)
   }, [cb])
+}
+
+export function useResources(project?: Project): [WidgetsLayout, Function] {
+  const [resources, setResources] = useState(project?.resources || [])
+
+  useEffect(() => {
+    setResources(project?.resources || [])
+  }, [project])
+
+  return [resources, setResources]
 }

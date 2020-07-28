@@ -9,3 +9,4 @@ export type CProps<P> = Readonly<
 >
 
 export type Pos = [number, number]
+

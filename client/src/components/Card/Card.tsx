@@ -1,4 +1,5 @@
 import React, {MouseEventHandler, useEffect, useRef} from 'react'
+import {WidgetConfig} from '../../services/projects.service'
 import {classnames} from '../../shared/classnames'
 import {noop} from '../../shared/noop'
 import {CProps, Pos} from '../../types'
@@ -7,7 +8,7 @@ import {CardFooter} from './CardFooter'
 
 interface CardProps {
   title: string
-  footer?: {link: string; title: string}
+  footer?: WidgetConfig
   isDragging?: boolean
   collapse?: boolean
   onPositionChange?: (position: Pos) => void
@@ -63,7 +64,7 @@ export const Card = React.memo(
               <div className="px-4 pb-4">{children}</div>
 
               {footer && (
-                <CardFooter link={footer.link}>{footer.title}</CardFooter>
+                <CardFooter link={footer.link}>{footer.name}</CardFooter>
               )}
             </>
           )}

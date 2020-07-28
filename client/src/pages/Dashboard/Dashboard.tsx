@@ -1,4 +1,5 @@
 import React, {Fragment, MouseEvent, useCallback, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import {AppBar} from '../../components/AppBar'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
@@ -16,6 +17,7 @@ import {
 
 export const Dashboard = () => {
   const projectId = useProjectId()
+  const history = useHistory()
   const [loading, project] = useProject(projectId)
   const [isDragging, setDragging] = useState(false)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
@@ -58,59 +60,65 @@ export const Dashboard = () => {
 
   const onIndexChange = (index: Pos) => setTargetIndex(index)
 
+  const onProjectChange = (id: string) =>
+    history.push('/dashboard?projectId=' + id)
+
   return (
-    <AppBar>
-      {loading && (
+    <AppBar projectId={projectId} onProjectChange={onProjectChange}>
+      {loading ? (
         <div className="flex justify-center mt-40 h-full w-full">
           <Spinner className="w-16 h-16" />
         </div>
-      )}
+      ) : (
+        <>
+          {project?.projectName && (
+            <div className="border-b p-4 text-3xl">{project.projectName}</div>
+          )}
 
-      {project?.projectName && (
-        <div className="border-b p-4 text-3xl">{project.projectName}</div>
-      )}
-
-      <div className="px-8 py-6">
-        <div className="flex">
-          {resources.map((col, colIndex) => (
-            <div key={colIndex} className="flex-1 px-2">
-              {isDragging && (
-                <DetectionArea
-                  index={[colIndex, 0]}
-                  position={position}
-                  onChange={onIndexChange}
-                />
-              )}
-
-              {col.map((item, index: number) => (
-                <Fragment key={item.id}>
-                  <Card
-                    className="mb-3"
-                    isDragging={
-                      isDragging && isEqual(operateItemIndex, [colIndex, index])
-                    }
-                    collapse={isDragging}
-                    title={item.title}
-                    footer={item.config}
-                    onMouseDown={e => onMouseDown(e, [colIndex, index])}
-                    onPositionChange={onPositionChange}
-                  >
-                    <span>{JSON.stringify(item.data)}</span>
-                  </Card>
-
+          <div className="px-8 py-6">
+            <div className="flex">
+              {resources.map((col, colIndex) => (
+                <div key={colIndex} className="flex-1 px-2">
                   {isDragging && (
                     <DetectionArea
-                      index={[colIndex, index + 1]}
+                      index={[colIndex, 0]}
                       position={position}
                       onChange={onIndexChange}
                     />
                   )}
-                </Fragment>
+
+                  {col.map((item, index: number) => (
+                    <Fragment key={item.id}>
+                      <Card
+                        className="mb-3"
+                        isDragging={
+                          isDragging &&
+                          isEqual(operateItemIndex, [colIndex, index])
+                        }
+                        collapse={isDragging}
+                        title={item.title}
+                        footer={item.config}
+                        onMouseDown={e => onMouseDown(e, [colIndex, index])}
+                        onPositionChange={onPositionChange}
+                      >
+                        <span>{JSON.stringify(item.data)}</span>
+                      </Card>
+
+                      {isDragging && (
+                        <DetectionArea
+                          index={[colIndex, index + 1]}
+                          position={position}
+                          onChange={onIndexChange}
+                        />
+                      )}
+                    </Fragment>
+                  ))}
+                </div>
               ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </AppBar>
   )
 }

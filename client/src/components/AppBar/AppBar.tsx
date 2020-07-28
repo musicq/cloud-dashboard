@@ -1,18 +1,28 @@
 import React from 'react'
 import {useHistory, useRouteMatch} from 'react-router-dom'
+import {noop} from '../../shared/noop'
 import {useCurrentUser} from '../../shared/useCurrentUser'
 import {MdAddCircle} from 'react-icons/md'
 import {CProps} from '../../types'
 import {Avatar} from '../Avatar'
 import {Button} from '../Button'
 import {Logo} from '../Logo'
+import {useProjects} from './AppBar.service'
 
-interface AppBarProps {}
+interface AppBarProps {
+  projectId?: string
+  onProjectChange?: (projectId: string) => void
+}
 
-export const AppBar = ({children}: CProps<AppBarProps>) => {
+export const AppBar = ({
+  projectId,
+  onProjectChange = noop,
+  children
+}: CProps<AppBarProps>) => {
   const {user} = useCurrentUser()
   const history = useHistory()
   const match = useRouteMatch()
+  const projects = useProjects()
 
   const isNewProjectPath = match.path === '/new-project'
 
@@ -23,7 +33,23 @@ export const AppBar = ({children}: CProps<AppBarProps>) => {
   return (
     <div>
       <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center">
-        <Logo reverse />
+        <div className="flex items-center">
+          <Logo reverse />
+
+          {projects.length > 0 && (
+            <div className="ml-6">
+              <select
+                className="bg-blue-500 border h-8 px-2 rounded text-white w-48"
+                value={projectId}
+                onChange={e => onProjectChange(e.target.value)}
+              >
+                {projects.map(project => (
+                  <option value={project.id}>{project.projectName}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
 
         {isLoggedIn && (
           <div className="flex items-center">

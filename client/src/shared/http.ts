@@ -1,5 +1,5 @@
 import {from, Observable, of} from 'rxjs'
-import {map, switchMap} from 'rxjs/operators'
+import {map, switchMap, take} from 'rxjs/operators'
 import {CONFIG} from '../config'
 import {Auth$} from '../services/auth.service'
 import {Err} from './go'
@@ -28,7 +28,8 @@ export function genURL(
 
 export function request(path: string, opt: RequestInit = {}) {
   const token$ = Auth$.getSession().pipe(
-    map(session => session.getIdToken().getJwtToken())
+    map(session => session.getIdToken().getJwtToken()),
+    take(1)
   )
 
   const opt$: Observable<RequestInit> = token$.pipe(

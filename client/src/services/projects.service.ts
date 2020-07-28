@@ -51,6 +51,13 @@ export function createProject(projectName: string) {
   )
 }
 
+export function getProjects() {
+  return request(`projects`).pipe(
+    map(res => res.Items),
+    catchError(errorHandlerWithDefaultValue([]))
+  )
+}
+
 export function getProjectById(id: string) {
   if (!id) {
     return EMPTY

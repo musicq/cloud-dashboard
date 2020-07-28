@@ -93,7 +93,15 @@ export class Gateway extends cdk.Construct {
       'GET',
       this.functions.getProjectByIdFn
     )
-    this.projectResource.addMethod('PUT')
-    this.projectResource.addMethod('DELETE')
+    this.wrapAuthorizer(
+      this.projectResource,
+      'PUT',
+      this.functions.updateProjectByIdFn
+    )
+    this.wrapAuthorizer(
+      this.projectResource,
+      'DELETE',
+      this.functions.deleteProjectByIdFn
+    )
   }
 }

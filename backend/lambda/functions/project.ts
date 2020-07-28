@@ -1,5 +1,6 @@
 import {DynamoDB} from 'aws-sdk'
 import {v4} from 'uuid'
+import {WidgetsLayout} from '../models/Widget'
 import {createNewWidgetsTemplate} from '../shared/createNewWidgetsTemplate'
 import {createResponse} from '../shared/createResponse'
 import {Err, go} from '../shared/go'
@@ -26,7 +27,13 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
     return createResponse('Body is empty.', 400)
   }
 
-  const data: createProjectModel = JSON.parse(event.body)
+  let data: createProjectModel
+  try {
+    data = JSON.parse(event.body)
+  } catch (e) {
+    console.log(e)
+    return createResponse('Body is an invalid json format', 400)
+  }
 
   const {projectName, username} = data
 
@@ -98,5 +105,78 @@ export const getById = withAuthenticate(
     }
 
     return createResponse(res)
+  }
+)
+
+export const updateProjectById = withAuthenticate(
+  async (event: SythenAPIGatewayEvent) => {
+    if (
+      !event.pathParameters ||
+      Object.keys(event.pathParameters).length === 0
+    ) {
+      return createResponse('Need to specific project id', 400)
+    }
+
+    if (!event.body) {
+      return createResponse('No body found', 400)
+    }
+
+    let resources: WidgetsLayout = []
+
+    try {
+      resources = JSON.parse(event.body)
+    } catch (e) {
+      return createResponse('Body is an invalid json format', 400)
+    }
+
+    const params: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName,
+      Key: {
+        username: event.token.data.userName,
+        id: event.pathParameters.projectId
+      },
+      UpdateExpression: 'set resources = :newResources',
+      ExpressionAttributeValues: {':newResources': resources}
+    }
+
+    const res = await go(dynamo.update(params).promise())
+
+    if (res instanceof Err) {
+      return createResponse(
+        `Update project ${event.pathParameters.projectId} failed.`,
+        500
+      )
+    }
+
+    return createResponse('ok')
+  }
+)
+
+export const deleteProjectById = withAuthenticate(
+  async (event: SythenAPIGatewayEvent) => {
+    if (
+      !event.pathParameters ||
+      Object.keys(event.pathParameters).length === 0
+    ) {
+      return createResponse('Need to specific project id', 400)
+    }
+
+    const params: DynamoDB.DocumentClient.DeleteItemInput = {
+      TableName,
+      Key: {
+        id: event.pathParameters.projectId
+      }
+    }
+
+    const res = await go(dynamo.delete(params).promise())
+
+    if (res instanceof Err) {
+      return createResponse(
+        `Delete project ${event.pathParameters.projectId} failed.`,
+        500
+      )
+    }
+
+    return createResponse('ok')
   }
 )

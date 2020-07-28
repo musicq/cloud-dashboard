@@ -8,6 +8,8 @@ export class Functions extends cdk.Construct {
   createProjectFn: lambda.Function
   getProjectsFn: lambda.Function
   getProjectByIdFn: lambda.Function
+  updateProjectByIdFn: lambda.Function
+  deleteProjectByIdFn: lambda.Function
 
   private defaultEnvironment: {[key: string]: string} = {
     TABLE_NAME: this.db.table.tableName,
@@ -32,11 +34,21 @@ export class Functions extends cdk.Construct {
       'GetProjectById',
       'project.getById'
     )
+    this.updateProjectByIdFn = this.buildFunction(
+      'UpdateProjectById',
+      'project.updateProjectById'
+    )
+    this.deleteProjectByIdFn = this.buildFunction(
+      'DeleteProjectById',
+      'project.deleteProjectById'
+    )
 
     db.table.grantReadWriteData(this.helloFn)
     db.table.grantWriteData(this.createProjectFn)
     db.table.grantReadData(this.getProjectsFn)
     db.table.grantReadData(this.getProjectByIdFn)
+    db.table.grantWriteData(this.updateProjectByIdFn)
+    db.table.grantWriteData(this.deleteProjectByIdFn)
   }
 
   private buildFunction(

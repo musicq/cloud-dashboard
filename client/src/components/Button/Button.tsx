@@ -59,7 +59,7 @@ export const Button = ({
   return (
     <button className={cls} disabled={isDisabled} onClick={onClick} {...rest}>
       <div className={loading ? 'flex items-center justify-center' : ''}>
-        <span className="flex mr-2">{loading && <Spinner />}</span>
+        <span className="flex mr-2">{loading && <Spinner className="w-4 h-4" />}</span>
         {children}
       </div>
     </button>

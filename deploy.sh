@@ -1,6 +1,7 @@
 #!/bin/bash
 
 git checkout deploy
+git merge master
 
 rm -rf ./build
 

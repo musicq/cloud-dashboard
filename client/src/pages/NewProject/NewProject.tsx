@@ -11,20 +11,24 @@ export const NewProject = () => {
   const [projectName, setProjectName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
   const history = useHistory()
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
 
     setLoading(true)
-    createProject(projectName).subscribe((res: any) => {
+    createProject(projectName).subscribe(res => {
       setLoading(false)
 
       if (res instanceof Err) {
-        return setError(true)
+        setErrMsg(res.e.msg || 'Create project failed!')
+        setError(true)
+        return
       }
 
       setError(false)
+      setErrMsg('')
       history.push(`/dashboard?projectId=${res.id}`)
     })
   }
@@ -35,7 +39,7 @@ export const NewProject = () => {
         <h1 className="text-2xl border-b p-4">New project</h1>
 
         <div className="p-4">
-          {error && <Alert className="mb-4">Create project failed!</Alert>}
+          {error && <Alert className="mb-4">{errMsg}</Alert>}
 
           <form onSubmit={onSubmit}>
             <div className="w-1/3">

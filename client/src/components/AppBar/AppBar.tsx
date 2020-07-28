@@ -1,28 +1,29 @@
 import React from 'react'
+import {MdAddCircle} from 'react-icons/md'
 import {useHistory, useRouteMatch} from 'react-router-dom'
+import {Project} from '../../services/projects.service'
 import {noop} from '../../shared/noop'
 import {useCurrentUser} from '../../shared/useCurrentUser'
-import {MdAddCircle} from 'react-icons/md'
 import {CProps} from '../../types'
 import {Avatar} from '../Avatar'
 import {Button} from '../Button'
 import {Logo} from '../Logo'
-import {useProjects} from './AppBar.service'
 
 interface AppBarProps {
   projectId?: string
+  projects?: Project[]
   onProjectChange?: (projectId: string) => void
 }
 
 export const AppBar = ({
   projectId,
+  projects = [],
   onProjectChange = noop,
   children
 }: CProps<AppBarProps>) => {
   const {user} = useCurrentUser()
   const history = useHistory()
   const match = useRouteMatch()
-  const projects = useProjects()
 
   const isNewProjectPath = match.path === '/new-project'
 
@@ -44,7 +45,9 @@ export const AppBar = ({
                 onChange={e => onProjectChange(e.target.value)}
               >
                 {projects.map(project => (
-                  <option value={project.id}>{project.projectName}</option>
+                  <option key={project.id} value={project.id}>
+                    {project.projectName}
+                  </option>
                 ))}
               </select>
             </div>

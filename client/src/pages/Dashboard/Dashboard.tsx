@@ -13,11 +13,13 @@ import {
   useListenMouseUpEvent,
   useProject,
   useProjectId,
+  useProjects,
   useResources
 } from './Dashboard.service'
 
 export const Dashboard = () => {
-  const projectId = useProjectId()
+  const [loadingProjects, projects] = useProjects()
+  const projectId = useProjectId(projects)
   const history = useHistory()
   const [loading, project] = useProject(projectId)
   const [isDragging, setDragging] = useState(false)
@@ -69,8 +71,12 @@ export const Dashboard = () => {
     history.push('/dashboard?projectId=' + id)
 
   return (
-    <AppBar projectId={projectId} onProjectChange={onProjectChange}>
-      {loading ? (
+    <AppBar
+      projects={projects}
+      projectId={projectId}
+      onProjectChange={onProjectChange}
+    >
+      {loading || loadingProjects ? (
         <div className="flex justify-center mt-40 h-full w-full">
           <Spinner className="w-16 h-16" />
         </div>

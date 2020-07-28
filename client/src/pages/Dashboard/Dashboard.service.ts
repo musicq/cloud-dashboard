@@ -1,7 +1,8 @@
 import {useEffect, useLayoutEffect, useState} from 'react'
-import {useLocation} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 import {
   getProjectById,
+  getProjects,
   Project,
   WidgetsLayout
 } from '../../services/projects.service'
@@ -10,9 +11,17 @@ import {Pos} from '../../types'
 
 export type OperateItemIndex = Pos | null
 
-export function useProjectId() {
+export function useProjectId(projects: Project[]) {
+  const history = useHistory()
   const location = useLocation()
   const {search} = location
+  const projectId = qs(search).projectId
+
+  useEffect(() => {
+    if (!projectId && projects.length > 0) {
+      history.push('/dashboard?projectId=' + projects[0].id)
+    }
+  }, [projects])
 
   return qs(search).projectId
 }
@@ -23,10 +32,12 @@ export function useProject(id: string): [boolean, Project?] {
 
   useEffect(() => {
     setLoading(true)
-    const sub = getProjectById(id).subscribe(res => {
-      setProject(res)
-      setLoading(false)
-    })
+    const sub = getProjectById(id).subscribe(
+      res => setProject(res),
+      e => {
+      },
+      () => setLoading(false)
+    )
 
     return () => sub.unsubscribe()
   }, [id])
@@ -95,4 +106,21 @@ export function useResources(project?: Project): [WidgetsLayout, Function] {
   }, [project])
 
   return [resources, setResources]
+}
+
+export function useProjects(): [boolean, Project[]] {
+  const [loading, setLoading] = useState(false)
+  const [projects, setProjects] = useState<Project[]>([])
+
+  useEffect(() => {
+    setLoading(true)
+    const sub = getProjects().subscribe(projects => {
+      setProjects(projects)
+      setLoading(false)
+    })
+
+    return () => sub.unsubscribe()
+  }, [])
+
+  return [loading, projects]
 }

@@ -16,6 +16,7 @@ import {
   useProjects,
   useResources
 } from './Dashboard.service'
+import {WidgetSwitcher} from './WidgetSwitcher'
 
 export const Dashboard = () => {
   const [loadingProjects, projects] = useProjects()
@@ -112,7 +113,7 @@ export const Dashboard = () => {
                         onMouseDown={e => onMouseDown(e, [colIndex, index])}
                         onPositionChange={onPositionChange}
                       >
-                        <span>{JSON.stringify(item.data)}</span>
+                        <WidgetSwitcher type={item.type} data={item.data} />
                       </Card>
 
                       {isDragging && (

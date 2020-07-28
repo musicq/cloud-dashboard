@@ -1,5 +1,7 @@
 # Cloud dashboard
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e1a4192e-327a-4e1c-8ed0-cfcee560322d/deploy-status)](https://app.netlify.com/sites/focused-hoover-466baa/deploys)
+
 A simple prototype of cloud dashboard app. Imitate [Coogle Cloud Dashboard](console.cloud.google.com).
 
 ## Try it

@@ -3,7 +3,7 @@ import {distinctUntilChanged, map, scan, shareReplay} from 'rxjs/operators'
 
 export type ReducerFn<S> = (s: S) => S
 
-type State = {[key: string]: any} | null
+type State = {[key: string]: any}
 type MapFn = <T, R>(s: T) => R | undefined
 
 export function createStore(initialState: State = {}) {
@@ -24,7 +24,7 @@ export function createStore(initialState: State = {}) {
   ): Observable<S> => {
     // eslint-disable-next-line
     if (predict == undefined) {
-      throw new Error('missing \'predict\' parameter in select\' method!')
+      throw new Error("missing 'predict' parameter in select' method!")
     }
 
     let mapFn = predict as MapFn

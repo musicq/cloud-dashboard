@@ -4,7 +4,7 @@ import {Alert} from '../../components/Alert'
 import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {TextInput} from '../../components/TextInput'
-import {createProject} from '../../services/projects.service'
+import {Projects$} from '../../services/projects.service'
 import {Err} from '../../shared/go'
 
 export const NewProject = () => {
@@ -22,7 +22,7 @@ export const NewProject = () => {
     }
 
     setLoading(true)
-    createProject(projectName).subscribe(res => {
+    Projects$.create(projectName).subscribe(res => {
       setLoading(false)
 
       if (res instanceof Err) {

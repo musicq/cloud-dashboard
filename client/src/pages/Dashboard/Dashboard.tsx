@@ -21,14 +21,14 @@ export const Dashboard = () => {
   const loading = useLoadingProjects()
   const projectId = useProjectId()
   const project = useProject(projectId)
+  const [resources, setResources] = useResources(project)
   const [isDragging, setDragging] = useState(false)
+  const [position, setPosition] = useState<Pos>([0, 0])
+  const [edit, setEdit] = useState(false)
+  const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
   )
-  const [position, setPosition] = useState<Pos>([0, 0])
-  const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
-  const [resources, setResources] = useResources(project)
-  const [edit, setEdit] = useState(false)
 
   const cancelDragging = useCallback(() => {
     setDragging(false)
@@ -96,7 +96,7 @@ export const Dashboard = () => {
     <AppBar>
       {loading ? (
         <div className="flex justify-center mt-40 h-full w-full">
-          <Spinner className="w-16 h-16"/>
+          <Spinner className="w-16 h-16" />
         </div>
       ) : (
         <>

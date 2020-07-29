@@ -1,26 +1,19 @@
-import React from 'react'
+import React, {ChangeEvent} from 'react'
 import {MdAddCircle} from 'react-icons/md'
 import {useHistory, useRouteMatch} from 'react-router-dom'
-import {Project} from '../../services/projects.service'
-import {noop} from '../../shared/noop'
 import {useCurrentUser} from '../../shared/useCurrentUser'
+import {useProjectId} from '../../shared/useProjectId'
 import {CProps} from '../../types'
 import {Avatar} from '../Avatar'
 import {Button} from '../Button'
 import {Logo} from '../Logo'
+import {useProjects} from './AppBar.service'
 
-interface AppBarProps {
-  projectId?: string
-  projects?: Project[]
-  onProjectChange?: (projectId: string) => void
-}
+interface AppBarProps {}
 
-export const AppBar = ({
-  projectId,
-  projects = [],
-  onProjectChange = noop,
-  children
-}: CProps<AppBarProps>) => {
+export const AppBar = ({children}: CProps<AppBarProps>) => {
+  const projects = useProjects()
+  const projectId = useProjectId(projects)
   const {user} = useCurrentUser()
   const history = useHistory()
   const match = useRouteMatch()
@@ -28,6 +21,14 @@ export const AppBar = ({
   const isNewProjectPath = match.path === '/new-project'
 
   const onCreateProject = () => history.push('/new-project')
+
+  const selectedProjectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (!e.target.value) {
+      return
+    }
+
+    history.push('/dashboard?projectId=' + e.target.value)
+  }
 
   const isLoggedIn = user !== null
 
@@ -42,7 +43,7 @@ export const AppBar = ({
               <select
                 className="bg-blue-500 border h-8 px-2 rounded text-white w-48"
                 value={projectId}
-                onChange={e => onProjectChange(e.target.value)}
+                onChange={selectedProjectChange}
               >
                 {projects.map(project => (
                   <option key={project.id} value={project.id}>

@@ -1,11 +1,11 @@
 import React, {Fragment, MouseEvent, useCallback, useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
 import {Spinner} from '../../components/Spinner'
-import {updateProjectResourcesById} from '../../services/projects.service'
+import {Projects$, useLoadingProjects} from '../../services/projects.service'
+import {useProjectId} from '../../shared/useProjectId'
 import {Pos} from '../../types'
 import {
   exchange,
@@ -13,17 +13,14 @@ import {
   OperateItemIndex,
   useListenMouseUpEvent,
   useProject,
-  useProjectId,
-  useProjects,
   useResources
 } from './Dashboard.service'
 import {WidgetSwitcher} from './WidgetSwitcher'
 
 export const Dashboard = () => {
-  const [loadingProjects, projects] = useProjects()
-  const projectId = useProjectId(projects)
-  const history = useHistory()
-  const [loading, project] = useProject(projectId)
+  const loading = useLoadingProjects()
+  const projectId = useProjectId()
+  const project = useProject(projectId)
   const [isDragging, setDragging] = useState(false)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
@@ -46,7 +43,7 @@ export const Dashboard = () => {
     setOperateItemIndex(null)
     setTargetIndex(null)
 
-    updateProjectResourcesById(projectId, newResources).subscribe({
+    Projects$.updateById(projectId, newResources).subscribe({
       error: e => console.error('Update project resources failed.', e)
     })
   }, [
@@ -70,15 +67,12 @@ export const Dashboard = () => {
 
   const onIndexChange = (index: Pos) => setTargetIndex(index)
 
-  const onProjectChange = (id: string) =>
-    history.push('/dashboard?projectId=' + id)
-
   const onEdit = () => setEdit(true)
 
   const onSave = () => {
     setEdit(false)
 
-    updateProjectResourcesById(projectId, resources).subscribe(
+    Projects$.updateById(projectId, resources).subscribe(
       () => console.log('Saved successfully.'),
       e => console.error('Save failed.')
     )
@@ -99,14 +93,10 @@ export const Dashboard = () => {
   }
 
   return (
-    <AppBar
-      projects={projects}
-      projectId={projectId}
-      onProjectChange={onProjectChange}
-    >
-      {loading || loadingProjects ? (
+    <AppBar>
+      {loading ? (
         <div className="flex justify-center mt-40 h-full w-full">
-          <Spinner className="w-16 h-16" />
+          <Spinner className="w-16 h-16"/>
         </div>
       ) : (
         <>

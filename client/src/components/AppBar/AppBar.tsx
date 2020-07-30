@@ -18,6 +18,7 @@ export const AppBar = ({children}: CProps<AppBarProps>) => {
   const history = useHistory()
   const match = useRouteMatch()
 
+  const isLoggedIn = user !== null
   const isNewProjectPath = match.path === '/new-project'
 
   const onCreateProject = () => history.push('/new-project')
@@ -30,52 +31,59 @@ export const AppBar = ({children}: CProps<AppBarProps>) => {
     history.push('/dashboard?projectId=' + e.target.value)
   }
 
-  const isLoggedIn = user !== null
-
   return (
     <div>
-      <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center fixed w-full">
+      <div className="py-1 px-4 shadow bg-blue-500 flex justify-between items-center fixed top-0 w-full">
         <div className="flex items-center">
           <Logo reverse />
 
-          {projects.length > 0 && (
-            <div className="ml-6">
-              <select
-                className="bg-blue-500 border h-8 px-2 rounded text-white w-48"
-                value={projectId}
-                onChange={selectedProjectChange}
-              >
-                {projects.map(project => (
-                  <option key={project.id} value={project.id}>
-                    {project.projectName}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {isLoggedIn && projects.length > 0 && (
+            <select
+              className="ml-6 bg-blue-500 border h-8 px-2 rounded text-white w-48"
+              value={projectId}
+              onChange={selectedProjectChange}
+            >
+              {projects.map(project => (
+                <option key={project.id} value={project.id}>
+                  {project.projectName}
+                </option>
+              ))}
+            </select>
           )}
         </div>
 
-        {isLoggedIn && (
-          <div className="flex items-center">
-            {!isNewProjectPath && (
-              <Button
-                primary
-                className="mr-8 text-white"
-                onClick={onCreateProject}
-              >
-                <div className="flex items-center">
-                  <MdAddCircle className="mr-1" />
-                  New project
-                </div>
-              </Button>
-            )}
+        <div>
+          {isLoggedIn && (
+            <div className="flex items-center">
+              {!isNewProjectPath && (
+                <Button
+                  primary
+                  className="mr-8 text-white"
+                  onClick={onCreateProject}
+                >
+                  <div className="flex items-center">
+                    <MdAddCircle className="mr-1" />
+                    New project
+                  </div>
+                </Button>
+              )}
 
-            {user && <Avatar user={user} />}
-          </div>
-        )}
+              <Avatar user={user} />
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="overflow-y-auto pt-12">{children}</div>
+      <div className="overflow-y-auto" style={style.body}>
+        {children}
+      </div>
     </div>
   )
+}
+
+const style = {
+  body: {
+    height: 'calc(100vh - 53px)',
+    marginTop: 53,
+  },
 }

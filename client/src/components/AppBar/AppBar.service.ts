@@ -12,11 +12,3 @@ export function useProjects() {
 
   return projects
 }
-
-export function useDefaultProjectId(id: string, projects: Project[]) {
-  if (id) {
-    return id
-  }
-
-  return projects[0]?.id
-}

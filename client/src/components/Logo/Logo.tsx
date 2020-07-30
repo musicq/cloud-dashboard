@@ -1,17 +1,19 @@
 import React from 'react'
 import {MdCloud} from 'react-icons/md'
 import {Link} from 'react-router-dom'
+import {classnames} from '../../shared/classnames'
 import {CProps} from '../../types'
 
 interface LogoProps {
   reverse?: boolean
 }
 
-export const Logo = ({reverse = false}: CProps<LogoProps>) => {
-  const cls = [
+export const Logo = ({reverse = false, className = ''}: CProps<LogoProps>) => {
+  const cls = classnames(
     'flex items-center text-3xl cursor-pointer',
-    reverse ? 'text-white' : 'text-blue-500'
-  ].join(' ')
+    reverse ? 'text-white' : 'text-blue-500',
+    className
+  )
 
   return (
     <Link to="/">

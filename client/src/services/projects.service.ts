@@ -1,10 +1,19 @@
 import {useEffect, useState} from 'react'
-import {BehaviorSubject, EMPTY, of} from 'rxjs'
-import {catchError, map, pluck, switchMap, take, tap} from 'rxjs/operators'
+import {Simulate} from 'react-dom/test-utils'
+import {BehaviorSubject, EMPTY, Observable, of} from 'rxjs'
+import {
+  catchError,
+  filter,
+  map,
+  pluck,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators'
 import {
   errorHandler,
   errorHandlerWithDefaultValue,
-  request
+  request,
 } from '../shared/http'
 import {store} from '../store'
 import {Auth$} from './auth.service'
@@ -15,7 +24,7 @@ export enum WidgetTypes {
   SQL,
   ProjectInfo,
   News,
-  Status
+  Status,
 }
 
 export interface WidgetConfig {
@@ -34,7 +43,8 @@ export interface Widget {
 export type WidgetsLayout = Array<Widget[]>
 
 export interface Project {
-  createdAt: string
+  updatedAt: number
+  createdAt: number
   id: string
   projectName: string
   resources: WidgetsLayout
@@ -42,10 +52,21 @@ export interface Project {
 }
 
 const Actions = {
-  Projects: 'Projects'
+  Projects: 'Projects',
 }
 
 const username$ = Auth$.getUserInfo().pipe(pluck('username'))
+
+export const Projects$ = {
+  loading$: new BehaviorSubject(false),
+  fetchProjects,
+  get: getProjects,
+  getById: getProjectById,
+  setById,
+  set: setProjects,
+  create: createProject,
+  updateById: updateProjectResourcesById,
+}
 
 function createProject(projectName: string) {
   return username$.pipe(
@@ -58,16 +79,6 @@ function createProject(projectName: string) {
   )
 }
 
-export const Projects$ = {
-  loading$: new BehaviorSubject(false),
-  get: getProjects,
-  getById: getProjectById,
-  setById,
-  set: setProjects,
-  create: createProject,
-  updateById: updateProjectResourcesById
-}
-
 function appendProject(project: Project) {
   store.createReducer(state => {
     const projects = state[Actions.Projects] || []
@@ -75,61 +86,92 @@ function appendProject(project: Project) {
 
     return {
       ...state,
-      [Actions.Projects]: newProjects
+      [Actions.Projects]: newProjects,
     }
   })
 }
 
-function getProjects() {
+function fetchProjects() {
   Projects$.loading$.next(true)
-  return store.select(Actions.Projects, []).pipe(
-    switchMap(projects =>
-      projects.length > 0
-        ? of(projects)
-        : request(`projects`).pipe(
-            map(res => res.Items),
-            tap(projects => {
-              if (projects && projects.length > 0) {
-                Projects$.set(projects)
-              }
-            }),
-            catchError(errorHandlerWithDefaultValue([]))
-          )
-    ),
-    tap(() => Projects$.loading$.next(false))
-  )
+
+  request(`projects`)
+    .pipe(
+      map(res => res.Items),
+      tap(projects => {
+        if (projects && projects.length > 0) {
+          Projects$.set(projects)
+        }
+      }),
+      catchError(errorHandlerWithDefaultValue([])),
+      tap(() => Projects$.loading$.next(false))
+    )
+    .subscribe()
+}
+
+function getProjects(): Observable<Project[]> {
+  return store.select<Project[]>(Actions.Projects, [])
 }
 
 function setProjects(projects: Project[]) {
-  store.createReducer(state => ({
-    ...state,
-    [Actions.Projects]: projects
-  }))
+  Projects$.get()
+    .pipe(
+      take(1),
+      map(stateProjects => {
+        if (!stateProjects || stateProjects.length === 0) {
+          return projects
+        }
+
+        // merge
+        return projects.map(project => {
+          const stateProject = stateProjects.find(p => p.id === project.id)
+
+          if (!stateProject) {
+            return project
+          }
+
+          if (stateProject.updatedAt === project.updatedAt) {
+            return project.resources ? project : stateProject
+          }
+
+          return stateProject.updatedAt > project.updatedAt
+            ? stateProject
+            : project
+        })
+      }),
+      tap(projects =>
+        store.createReducer(state => ({
+          ...state,
+          [Actions.Projects]: projects,
+        }))
+      )
+    )
+    .subscribe()
 }
 
-function getProjectById(id: string) {
-  if (!id) {
-    return EMPTY
-  }
-
+let loadingProjectById = false
+function getProjectById(id?: string) {
   const defaultValue = {}
 
   return store.select(Actions.Projects, [] as Project[]).pipe(
+    filter(() => Boolean(id) && !loadingProjectById),
     switchMap(projects => {
       const project = projects.find(project => project.id === id)
 
-      if (projects.length > 0 && project && project.resources) {
+      if (project && project.resources) {
         return of(project)
       }
 
       Projects$.loading$.next(true)
+      loadingProjectById = true
+
       return request(`projects/${id}`).pipe(
         map(res => res.Item),
         tap(project => {
           if (project) {
-            Projects$.setById(id, project)
+            Projects$.setById(id!, project)
           }
           Projects$.loading$.next(false)
+          loadingProjectById = false
         }),
         catchError(errorHandlerWithDefaultValue(defaultValue))
       )
@@ -140,28 +182,38 @@ function getProjectById(id: string) {
 function setById(id: string, project: Project) {
   store.createReducer(state => {
     const projects: Project[] = state[Actions.Projects] || []
-    const newProjects = projects.map(p => {
-      if (p.id === id) {
-        return project
-      }
-      return p
-    })
+
+    let newProjects = []
+
+    if (projects.length === 0) {
+      newProjects.push(project)
+    } else {
+      newProjects = projects.map(p => {
+        if (p.id === id) {
+          return project
+        }
+        return p
+      })
+    }
 
     return {
       ...state,
-      [Actions.Projects]: newProjects
+      [Actions.Projects]: newProjects,
     }
   })
 }
 
-function updateProjectResourcesById(id: string, resources: WidgetsLayout) {
+function updateProjectResourcesById(
+  id: string | undefined,
+  resources: WidgetsLayout
+) {
   if (!id) {
     return EMPTY
   }
 
   return request(`projects/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(resources)
+    body: JSON.stringify(resources),
   }).pipe(
     tap(res => {
       Projects$.getById(id)

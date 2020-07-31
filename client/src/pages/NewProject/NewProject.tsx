@@ -38,39 +38,37 @@ export const NewProject = () => {
   }
 
   return (
-    <AppBar>
-      <div>
-        <h1 className="text-2xl border-b p-4">New project</h1>
+    <div>
+      <h1 className="text-2xl border-b p-4">New project</h1>
 
-        <div className="p-4">
-          {error && <Alert className="mb-4">{errMsg}</Alert>}
+      <div className="p-4">
+        {error && <Alert className="mb-4">{errMsg}</Alert>}
 
-          <form onSubmit={onSubmit}>
-            <div className="w-1/3">
-              <TextInput
-                label="Project name"
-                placeholder="Project name"
-                value={projectName}
-                onChange={e => setProjectName(e.target.value)}
-              />
-            </div>
+        <form onSubmit={onSubmit}>
+          <div className="w-1/3">
+            <TextInput
+              label="Project name"
+              placeholder="Project name"
+              value={projectName}
+              onChange={e => setProjectName(e.target.value)}
+            />
+          </div>
 
-            <div className="flex items-center mt-8">
-              <Button
-                type="submit"
-                className="mr-4"
-                primary
-                loading={loading}
-                onClick={onSubmit}
-              >
-                Create
-              </Button>
+          <div className="flex items-center mt-8">
+            <Button
+              type="submit"
+              className="mr-4"
+              primary
+              loading={loading}
+              onClick={onSubmit}
+            >
+              Create
+            </Button>
 
-              <Button onClick={history.goBack}>Cancel</Button>
-            </div>
-          </form>
-        </div>
+            <Button onClick={history.goBack}>Cancel</Button>
+          </div>
+        </form>
       </div>
-    </AppBar>
+    </div>
   )
 }

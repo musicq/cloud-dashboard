@@ -1,5 +1,4 @@
 import React, {Fragment, MouseEvent, useCallback, useState} from 'react'
-import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
@@ -13,7 +12,7 @@ import {
   OperateItemIndex,
   useListenMouseUpEvent,
   useProject,
-  useResources
+  useResources,
 } from './Dashboard.service'
 import {WidgetSwitcher} from './WidgetSwitcher'
 
@@ -44,7 +43,7 @@ export const Dashboard = () => {
     setTargetIndex(null)
 
     Projects$.updateById(projectId, newResources).subscribe({
-      error: e => console.error('Update project resources failed.', e)
+      error: e => console.error('Update project resources failed.', e),
     })
   }, [
     operateItemIndex,
@@ -53,7 +52,7 @@ export const Dashboard = () => {
     setDragging,
     setResources,
     setOperateItemIndex,
-    setTargetIndex
+    setTargetIndex,
   ])
 
   useListenMouseUpEvent(cancelDragging)
@@ -93,7 +92,7 @@ export const Dashboard = () => {
   }
 
   return (
-    <AppBar>
+    <div>
       {loading ? (
         <div className="flex justify-center mt-40 h-full w-full">
           <Spinner className="w-16 h-16" />
@@ -160,6 +159,6 @@ export const Dashboard = () => {
           </div>
         </>
       )}
-    </AppBar>
+    </div>
   )
 }

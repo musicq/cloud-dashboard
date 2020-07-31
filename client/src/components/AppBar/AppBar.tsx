@@ -13,7 +13,7 @@ interface AppBarProps {}
 
 export const AppBar = ({children}: CProps<AppBarProps>) => {
   const projects = useProjects()
-  const projectId = useProjectId(projects)
+  const projectId = useProjectId()
   const {user} = useCurrentUser()
   const history = useHistory()
   const match = useRouteMatch()

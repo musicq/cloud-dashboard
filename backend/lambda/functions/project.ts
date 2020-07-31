@@ -6,7 +6,7 @@ import {createResponse} from '../shared/createResponse'
 import {Err, go} from '../shared/go'
 import {
   SythenAPIGatewayEvent,
-  withAuthenticate
+  withAuthenticate,
 } from '../shared/withAuthenticate'
 
 const dynamo = new DynamoDB.DocumentClient()
@@ -41,8 +41,8 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
     TableName,
     KeyConditionExpression: 'username = :username',
     ExpressionAttributeValues: {
-      ':username': event.token.data.userName
-    }
+      ':username': event.token.data.userName,
+    },
   }
 
   const queryRes = await go(dynamo.query(queryParams).promise())
@@ -64,11 +64,14 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
     )
   }
 
+  const time = Date.now()
+
   const items = {
     username,
     id: v4(),
     projectName,
-    createdAt: Date.now()
+    createdAt: time,
+    updatedAt: time,
   }
 
   const params: DynamoDB.DocumentClient.PutItemInput = {
@@ -78,9 +81,9 @@ export const create = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
       resources: createNewWidgetsTemplate({
         projectInfoData: items,
         APIData: {source: 'https://google.com'},
-        SQLData: {source: 'https://baidu.com'}
-      })
-    }
+        SQLData: {source: 'https://baidu.com'},
+      }),
+    },
   }
 
   const res = await go(dynamo.put(params).promise())
@@ -99,9 +102,9 @@ export const get = withAuthenticate(async (event: SythenAPIGatewayEvent) => {
     TableName,
     KeyConditionExpression: 'username = :username',
     ExpressionAttributeValues: {
-      ':username': event.token.data.userName
+      ':username': event.token.data.userName,
     },
-    ProjectionExpression: 'username,id,projectName,createAt'
+    ProjectionExpression: 'username,id,projectName,createdAt,updatedAt',
   }
 
   const res = await go(dynamo.query(params).promise())
@@ -126,8 +129,8 @@ export const getById = withAuthenticate(
       TableName,
       Key: {
         username: event.token.data.userName,
-        id: event.pathParameters.projectId
-      }
+        id: event.pathParameters.projectId,
+      },
     }
 
     const res = await go(dynamo.get(params).promise())
@@ -168,10 +171,14 @@ export const updateProjectById = withAuthenticate(
       TableName,
       Key: {
         username: event.token.data.userName,
-        id: event.pathParameters.projectId
+        id: event.pathParameters.projectId,
       },
-      UpdateExpression: 'set resources = :newResources',
-      ExpressionAttributeValues: {':newResources': resources}
+      UpdateExpression:
+        'set resources = :newResources, updatedAt = :updatedAt',
+      ExpressionAttributeValues: {
+        ':newResources': resources,
+        ':updatedAt': Date.now(),
+      },
     }
 
     const res = await go(dynamo.update(params).promise())
@@ -199,8 +206,8 @@ export const deleteProjectById = withAuthenticate(
     const params: DynamoDB.DocumentClient.DeleteItemInput = {
       TableName,
       Key: {
-        id: event.pathParameters.projectId
-      }
+        id: event.pathParameters.projectId,
+      },
     }
 
     const res = await go(dynamo.delete(params).promise())

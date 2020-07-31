@@ -12,7 +12,7 @@ interface DetectionAreaProps {
 export function DetectionArea({
   index,
   position,
-  onChange
+  onChange,
 }: CProps<DetectionAreaProps>) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -23,7 +23,7 @@ export function DetectionArea({
     if (active) {
       onChange(index)
     }
-  }, [active])
+  }, [active, index, onChange])
 
   return (
     <div

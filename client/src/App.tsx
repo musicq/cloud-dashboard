@@ -1,10 +1,9 @@
-import React from 'react'
-import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom'
+import React, {useCallback} from 'react'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import {Guard} from './components/Guard'
 import {Launch} from './components/Launch'
-import {Dashboard} from './pages/Dashboard'
+import {Home} from './pages/Home'
 import {Login} from './pages/Login'
-import {NewProject} from './pages/NewProject'
 import {useAuthConfig} from './shared/useAuthConfig'
 import {useCurrentUser} from './shared/useCurrentUser'
 
@@ -12,7 +11,7 @@ export function App() {
   useAuthConfig()
   const {user, loading} = useCurrentUser()
 
-  const guard = () => Boolean(user)
+  const guard = useCallback(() => Boolean(user), [user])
 
   if (loading) {
     return (
@@ -21,22 +20,15 @@ export function App() {
       </div>
     )
   }
-
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/">
-          <Redirect to="/dashboard" />
-        </Route>
-        <Guard guard={guard} path="/dashboard">
-          <Dashboard />
-        </Guard>
-        <Guard guard={guard} path="/new-project">
-          <NewProject />
-        </Guard>
         <Route path="/login">
           <Login />
         </Route>
+        <Guard guard={guard} path="/">
+          <Home />
+        </Guard>
       </Switch>
     </BrowserRouter>
   )

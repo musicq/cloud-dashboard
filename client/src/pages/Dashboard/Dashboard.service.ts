@@ -2,13 +2,13 @@ import {useEffect, useLayoutEffect, useState} from 'react'
 import {
   Project,
   Projects$,
-  WidgetsLayout
+  WidgetsLayout,
 } from '../../services/projects.service'
 import {Pos} from '../../types'
 
 export type OperateItemIndex = Pos | null
 
-export function useProject(id: string): Project | undefined {
+export function useProject(id?: string): Project | undefined {
   const [project, setProject] = useState<Project>()
 
   useEffect(() => {

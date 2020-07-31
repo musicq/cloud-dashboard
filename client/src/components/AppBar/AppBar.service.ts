@@ -5,18 +5,14 @@ export function useProjects() {
   const [projects, setProjects] = useState<Project[]>([])
 
   useEffect(() => {
+    Projects$.fetchProjects()
+  }, [])
+
+  useEffect(() => {
     const sub = Projects$.get().subscribe(projects => setProjects(projects))
 
     return () => sub.unsubscribe()
   }, [])
 
   return projects
-}
-
-export function useDefaultProjectId(id: string, projects: Project[]) {
-  if (id) {
-    return id
-  }
-
-  return projects[0]?.id
 }

@@ -1,5 +1,4 @@
 import React, {Fragment, MouseEvent, useCallback, useState} from 'react'
-import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {Card} from '../../components/Card'
 import {DetectionArea} from '../../components/DetectionArea'
@@ -13,7 +12,7 @@ import {
   OperateItemIndex,
   useListenMouseUpEvent,
   useProject,
-  useResources
+  useResources,
 } from './Dashboard.service'
 import {WidgetSwitcher} from './WidgetSwitcher'
 
@@ -21,14 +20,14 @@ export const Dashboard = () => {
   const loading = useLoadingProjects()
   const projectId = useProjectId()
   const project = useProject(projectId)
+  const [resources, setResources] = useResources(project)
   const [isDragging, setDragging] = useState(false)
+  const [position, setPosition] = useState<Pos>([0, 0])
+  const [edit, setEdit] = useState(false)
+  const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
   const [operateItemIndex, setOperateItemIndex] = useState<OperateItemIndex>(
     null
   )
-  const [position, setPosition] = useState<Pos>([0, 0])
-  const [targetIndex, setTargetIndex] = useState<OperateItemIndex>(null)
-  const [resources, setResources] = useResources(project)
-  const [edit, setEdit] = useState(false)
 
   const cancelDragging = useCallback(() => {
     setDragging(false)
@@ -44,28 +43,39 @@ export const Dashboard = () => {
     setTargetIndex(null)
 
     Projects$.updateById(projectId, newResources).subscribe({
-      error: e => console.error('Update project resources failed.', e)
+      error: e => console.error('Update project resources failed.', e),
     })
   }, [
     operateItemIndex,
     targetIndex,
+    projectId,
     resources,
     setDragging,
     setResources,
     setOperateItemIndex,
-    setTargetIndex
+    setTargetIndex,
   ])
 
   useListenMouseUpEvent(cancelDragging)
 
-  const onPositionChange = (position: Pos) => setPosition(position)
+  const onPositionChange = useCallback(
+    (position: Pos) => setPosition(position),
+    [setPosition]
+  )
 
   const onMouseDown = (e: MouseEvent<HTMLDivElement>, index: Pos) => {
     setDragging(true)
     setOperateItemIndex(index)
   }
 
-  const onIndexChange = (index: Pos) => setTargetIndex(index)
+  const onIndexChange = useCallback(
+    (index: Pos) => {
+      if (!isEqual(targetIndex, index)) {
+        setTargetIndex(index)
+      }
+    },
+    [targetIndex, setTargetIndex]
+  )
 
   const onEdit = () => setEdit(true)
 
@@ -93,10 +103,10 @@ export const Dashboard = () => {
   }
 
   return (
-    <AppBar>
+    <div>
       {loading ? (
         <div className="flex justify-center mt-40 h-full w-full">
-          <Spinner className="w-16 h-16"/>
+          <Spinner className="w-16 h-16" />
         </div>
       ) : (
         <>
@@ -160,6 +170,6 @@ export const Dashboard = () => {
           </div>
         </>
       )}
-    </AppBar>
+    </div>
   )
 }

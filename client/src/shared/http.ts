@@ -26,6 +26,33 @@ export function genURL(
   return new URL(`${env}/${path}`, base).href
 }
 
+export function http(url: string, opt: RequestInit = {}): Observable<Response> {
+  return new Observable(subscriber => {
+    const cancelToken = new AbortController()
+    let completed = false
+
+    const options: RequestInit = {signal: cancelToken.signal, ...opt}
+
+    from(fetch(url, options)).subscribe(
+      res => {
+        console.log('responsed')
+        subscriber.next(res)
+      },
+      err => subscriber.error(err),
+      () => {
+        completed = true
+        subscriber.complete()
+      }
+    )
+
+    return () => {
+      if (!completed) {
+        cancelToken.abort()
+      }
+    }
+  })
+}
+
 export function request(path: string, opt: RequestInit = {}) {
   const token$ = Auth$.getSession().pipe(
     map(session => session.getIdToken().getJwtToken()),
@@ -42,13 +69,13 @@ export function request(path: string, opt: RequestInit = {}) {
       return {
         url: genURL(path),
         headers: {Authorization: token},
-        ...restOpts
+        ...restOpts,
       }
     })
   )
 
   return opt$.pipe(
-    switchMap(opt => from(fetch(genURL(path), opt))),
+    switchMap(opt => http(genURL(path), opt)),
     switchMap(res => {
       if (res.status >= 400) {
         return from(res.json()).pipe(switchMap(e => throwError(new Err(e))))

@@ -1,7 +1,6 @@
 import React, {SyntheticEvent, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import {Alert} from '../../components/Alert'
-import {AppBar} from '../../components/AppBar'
 import {Button} from '../../components/Button'
 import {TextInput} from '../../components/TextInput'
 import {Projects$} from '../../services/projects.service'

@@ -48,6 +48,7 @@ export const Dashboard = () => {
   }, [
     operateItemIndex,
     targetIndex,
+    projectId,
     resources,
     setDragging,
     setResources,
@@ -57,14 +58,24 @@ export const Dashboard = () => {
 
   useListenMouseUpEvent(cancelDragging)
 
-  const onPositionChange = (position: Pos) => setPosition(position)
+  const onPositionChange = useCallback(
+    (position: Pos) => setPosition(position),
+    [setPosition]
+  )
 
   const onMouseDown = (e: MouseEvent<HTMLDivElement>, index: Pos) => {
     setDragging(true)
     setOperateItemIndex(index)
   }
 
-  const onIndexChange = (index: Pos) => setTargetIndex(index)
+  const onIndexChange = useCallback(
+    (index: Pos) => {
+      if (!isEqual(targetIndex, index)) {
+        setTargetIndex(index)
+      }
+    },
+    [targetIndex, setTargetIndex]
+  )
 
   const onEdit = () => setEdit(true)
 

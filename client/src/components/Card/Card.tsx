@@ -28,14 +28,14 @@ export const Card = React.memo(
     className = '',
     onPositionChange = noop,
     onMouseDown = noop,
-    children
+    children,
   }: CProps<CardProps>) => {
     const ref = useRef<HTMLDivElement>(null)
     const position = usePosition(ref, isDragging)
 
     useEffect(() => {
       onPositionChange(position)
-    }, [position])
+    }, [position, onPositionChange])
 
     return (
       <>

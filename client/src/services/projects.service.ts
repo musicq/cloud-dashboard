@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react'
-import {Simulate} from 'react-dom/test-utils'
 import {BehaviorSubject, EMPTY, Observable, of} from 'rxjs'
 import {
   catchError,
@@ -149,6 +148,7 @@ function setProjects(projects: Project[]) {
 }
 
 let loadingProjectById = false
+
 function getProjectById(id?: string) {
   const defaultValue = {}
 

@@ -12,7 +12,7 @@
     "gen": "cdk synth --no-staging > template.yaml"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.51.0",
+    "@aws-cdk/assert": "1.180.0",
     "@types/aws-lambda": "^8.10.59",
     "@types/jest": "^25.2.1",
     "@types/node": "10.17.5",
@@ -23,11 +23,11 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-apigateway": "^1.51.0",
-    "@aws-cdk/aws-cognito": "^1.51.0",
-    "@aws-cdk/aws-dynamodb": "^1.51.0",
-    "@aws-cdk/aws-lambda": "^1.51.0",
-    "@aws-cdk/core": "1.51.0",
+    "@aws-cdk/aws-apigateway": "^1.180.0",
+    "@aws-cdk/aws-cognito": "^1.180.0",
+    "@aws-cdk/aws-dynamodb": "^1.180.0",
+    "@aws-cdk/aws-lambda": "^1.180.0",
+    "@aws-cdk/core": "1.180.0",
     "aws-sdk": "^2.717.0"
   }
 }
